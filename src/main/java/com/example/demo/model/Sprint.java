@@ -17,7 +17,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
-@Table(name = "sprint")
+@Table
 public class Sprint extends Base {
 
 	/**

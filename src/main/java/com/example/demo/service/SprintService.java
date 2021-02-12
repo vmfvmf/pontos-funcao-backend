@@ -10,7 +10,7 @@ import com.example.demo.model.Sprint;
 public interface SprintService {
 	public List<Sprint> findAll(Sprint flitro);
 	public Sprint save(Sprint s);
-	public void deleteById(Integer id);
-	public Optional<Sprint> findById(Integer id);
+	public void deleteById(long id);
+	public Optional<Sprint> findById(long id);
 	 
 }

@@ -19,7 +19,7 @@ public class Transacao extends ItemContagem{
 	private static final long serialVersionUID = 1822603001509468294L;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="grupo_id", nullable=false)
+	@JoinColumn(name="grupo_id")
 	private GrupoTransacao grupo;
 	
 	@Column(name = "funcao")

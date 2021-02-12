@@ -23,8 +23,8 @@ public class SprintServiceImpl implements SprintService{
 	}
 
 	@Override
-	public void deleteById(Integer id) {
-		sprintRepository.deleteById((long)id.intValue());
+	public void deleteById(long id) {
+		sprintRepository.deleteById(id);
 	}
 
 	@Override
@@ -36,8 +36,8 @@ public class SprintServiceImpl implements SprintService{
 	}
 
 	@Override
-	public Optional<Sprint> findById(Integer id) {
-		return sprintRepository.findById((long)id.intValue());
+	public Optional<Sprint> findById(long id) {
+		return sprintRepository.findById(id);
 	}
 
 

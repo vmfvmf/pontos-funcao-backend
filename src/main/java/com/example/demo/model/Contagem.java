@@ -1,8 +1,8 @@
 package com.example.demo.model;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,7 +35,7 @@ public class Contagem extends Base {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@JsonBackReference(value="sistema")
+	@JsonBackReference(value="sistema_contagens")
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="sistema_id", nullable=false)
 	private Sistema sistema;
@@ -55,14 +55,14 @@ public class Contagem extends Base {
 	private EscopoContagemEnum escopo;
 	
 	@OneToMany(mappedBy = "contagem")
-	private Set<ItemContagem> itens = new HashSet<ItemContagem>();
+	private List<ArquivoLogico> arquivosLogicos = new ArrayList<ArquivoLogico>();
 
-	public Set<ItemContagem> getItens() {
-		return itens;
+	public List<ArquivoLogico> getArquivosLogicos() {
+		return arquivosLogicos;
 	}
 
-	public void setItens(Set<ItemContagem> itens) {
-		this.itens = itens;
+	public void setArquivosLogicos(List<ArquivoLogico> arquivosLogicos) {
+		this.arquivosLogicos = arquivosLogicos;
 	}
 
 	public long getId() {

@@ -9,6 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.example.demo.enums.FuncaoArquivoLogico;
 import com.example.demo.enums.TipoItemContagemEnum;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -28,10 +29,7 @@ public abstract class ItemContagem extends Base {
 	@ManyToOne()
 	@JoinColumn(name="contagem_id", nullable=false)
 	private Contagem contagem;
-	
-	@Column(name = "tipo", nullable = false)
-	private TipoItemContagemEnum tipo;
-	
+		
 	@Column(name = "valor")
 	private Integer valor;
 	
@@ -43,6 +41,9 @@ public abstract class ItemContagem extends Base {
 	
 	@Column(name = "contado")
 	private Boolean contado;
+	
+	@Column(name = "funcao") // EE, SE, CE para Transação / ALI, AIE para ArquivoLógico
+	private String funcao;
 
 	public long getId() {
 		return id;
@@ -50,14 +51,6 @@ public abstract class ItemContagem extends Base {
 
 	public void setId(long id) {
 		this.id = id;
-	}
-
-	public TipoItemContagemEnum getTipo() {
-		return tipo;
-	}
-
-	public void setTipo(TipoItemContagemEnum tipo) {
-		this.tipo = tipo;
 	}
 
 	public Integer getValor() {

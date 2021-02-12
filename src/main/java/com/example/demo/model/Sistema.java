@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -16,7 +17,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
-@Table(name = "sistema")
+@Table
 @NamedQuery(name = "Sistema.findByContagemId",
 			query = "select s from Sistema s join Contagem c on c.sistema= s where c.sistema.id = ?1")
 public class Sistema extends Base {
@@ -35,15 +36,19 @@ public class Sistema extends Base {
 	@Column(name = "versao", nullable = false)
 	private String versao;
 	
-	@JsonManagedReference("sistema")
+	@JsonManagedReference("sistema_contagens")
 	@OneToMany(mappedBy = "sistema")
-	private Set<Contagem> contagens = new HashSet<Contagem>();
+	private List<Contagem> contagens = new ArrayList<Contagem>();
+	
+	@JsonManagedReference("sistema_tabelas")
+	@OneToMany(mappedBy = "sistema")
+	private List<Tabela> tabelas = new ArrayList<Tabela>();
 
-	public Set<Contagem> getContagens() {
+	public List<Contagem> getContagens() {
 		return contagens;
 	}
 
-	public void setContagens(Set<Contagem> contagens) {
+	public void setContagens(List<Contagem> contagens) {
 		this.contagens = contagens;
 	}
 
@@ -69,6 +74,14 @@ public class Sistema extends Base {
 
 	public void setVersao(String versao) {
 		this.versao = versao;
+	}
+
+	public List<Tabela> getTabelas() {
+		return tabelas;
+	}
+
+	public void setTabelas(List<Tabela> tabelas) {
+		this.tabelas = tabelas;
 	}
 
 	

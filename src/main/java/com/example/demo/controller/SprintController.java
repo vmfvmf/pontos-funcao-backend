@@ -27,7 +27,7 @@ public class SprintController {
 		return f;
 	}
 	@GetMapping("/sprints/{id}")
-	public Optional<Sprint> getSprintById(@PathVariable Integer id){
+	public Optional<Sprint> getSprintById(@PathVariable long id){
 	        Optional<Sprint> d = sprintService.findById(id);
 	        return d;
 	    }
@@ -45,7 +45,7 @@ public class SprintController {
 	    }
 	
 	 @DeleteMapping("/sprints/{id}")
-	public void deleteSprint(@PathVariable Integer id){
+	public void deleteSprint(@PathVariable long id){
 		 	sprintService.deleteById(id);
 	    }
 
