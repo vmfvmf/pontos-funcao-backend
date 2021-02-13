@@ -9,7 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.example.demo.enums.FuncaoArquivoLogico;
+import com.example.demo.enums.FuncaoDados;
 import com.example.demo.enums.TipoItemContagemEnum;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -42,8 +42,25 @@ public abstract class ItemContagem extends Base {
 	@Column(name = "contado")
 	private Boolean contado;
 	
-	@Column(name = "funcao") // EE, SE, CE para Transação / ALI, AIE para ArquivoLógico
-	private String funcao;
+	@Column(name = "subtipo") // EE, SE, CE para Transação / ALI, AIE para ArquivoLógico
+	private String subtipo;
+
+
+	public Contagem getContagem() {
+		return contagem;
+	}
+
+	public void setContagem(Contagem contagem) {
+		this.contagem = contagem;
+	}
+
+	public String getSubtipo() {
+		return subtipo;
+	}
+
+	public void setSubtipo(String subtipo) {
+		this.subtipo = subtipo;
+	}
 
 	public long getId() {
 		return id;

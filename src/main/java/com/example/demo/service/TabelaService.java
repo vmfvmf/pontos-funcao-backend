@@ -10,4 +10,5 @@ public interface TabelaService {
 	public Tabela save(Tabela d);
 	public void deleteById(long id);
 	public Optional<Tabela> findById(long id);
+	public List<Tabela> salvaEmLote(List<Tabela> tabelas);
 }

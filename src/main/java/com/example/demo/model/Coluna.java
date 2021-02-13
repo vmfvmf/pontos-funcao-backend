@@ -15,10 +15,11 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Entity
 @Table
 public class Coluna extends Base {
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -2702555258585755494L;
+	private static final long serialVersionUID = 8933834758570620231L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,10 +28,23 @@ public class Coluna extends Base {
 	@Column(name = "nome", nullable = false)
 	private String nome;
 
-	@JsonBackReference(value="colunas")
+	@JsonBackReference(value="tabela_colunas")
 	@ManyToOne
 	@JoinColumn(name="tabela_id", nullable=false)
 	private Tabela tabela;
+	
+
+	public Tabela getTabela() {
+		return tabela;
+	}
+
+	public void setTabela(Tabela tabela) {
+		this.tabela = tabela;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
 
 	public long getId() {
 		return id;
@@ -44,17 +58,6 @@ public class Coluna extends Base {
 		return nome;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public Tabela getTabela() {
-		return tabela;
-	}
-
-	public void setTabela(Tabela tabela) {
-		this.tabela = tabela;
-	}
 
 
 	

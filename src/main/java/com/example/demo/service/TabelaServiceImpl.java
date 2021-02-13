@@ -18,8 +18,8 @@ public class TabelaServiceImpl implements TabelaService{
 	private TabelaRepository tabelaRepository;
 
 	@Override
-	public Tabela save(Tabela sprint) {
-		return tabelaRepository.save(sprint);
+	public Tabela save(Tabela tabela) {
+		return tabelaRepository.save(tabela);
 	}
 
 	@Override
@@ -37,6 +37,11 @@ public class TabelaServiceImpl implements TabelaService{
 	@Override
 	public Optional<Tabela> findById(long id) {
 		return tabelaRepository.findById(id);
+	}
+
+	@Override
+	public List<Tabela> salvaEmLote(List<Tabela> tabelas) {
+		return tabelaRepository.saveAll(tabelas);
 	}
 
 

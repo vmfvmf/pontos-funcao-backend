@@ -38,6 +38,11 @@ public class TabelaController {
 	        return s;
 	    }
 	
+	@PostMapping("/tabelas/emlote")
+	public List<Tabela> salvaEmLote( @RequestBody List<Tabela> tabelas){
+		return tabelaService.salvaEmLote(tabelas);
+	    }
+	
 	@PutMapping("/tabelas")
 	public Tabela updateTabela( @RequestBody Tabela tabela){
 		Tabela s = tabelaService.save(tabela);

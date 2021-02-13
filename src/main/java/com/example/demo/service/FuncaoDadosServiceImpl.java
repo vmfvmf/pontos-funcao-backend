@@ -8,17 +8,17 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.model.ArquivoLogico;
+import com.example.demo.model.FuncaoDados;
 import com.example.demo.repository.ArquivoLogicoRepository;
 
 @Service("arquivoLogicoService")
-public class ArquivoLogicoServiceImpl implements ArquivoLogicoService{
+public class FuncaoDadosServiceImpl implements FuncaoDadosService{
 
 	@Autowired
 	private ArquivoLogicoRepository arquivoLogicoRepository;
 
 	@Override
-	public ArquivoLogico save(ArquivoLogico arquivoLogico) {
+	public FuncaoDados save(FuncaoDados arquivoLogico) {
 		return arquivoLogicoRepository.save(arquivoLogico);
 	}
 
@@ -28,15 +28,15 @@ public class ArquivoLogicoServiceImpl implements ArquivoLogicoService{
 	}
 
 	@Override
-	public List<ArquivoLogico> findAll(ArquivoLogico filtro) {
+	public List<FuncaoDados> findAll(FuncaoDados filtro) {
 		ExampleMatcher mat = ExampleMatcher.matching().withIgnoreNullValues();
 		//withIgnorePaths(paths...)
-		Example<ArquivoLogico> ex = Example.of(filtro, mat);
+		Example<FuncaoDados> ex = Example.of(filtro, mat);
 		return arquivoLogicoRepository.findAll(ex);
 	}
 
 	@Override
-	public Optional<ArquivoLogico> findById(long id) {
+	public Optional<FuncaoDados> findById(long id) {
 		return arquivoLogicoRepository.findById(id);
 	}
 

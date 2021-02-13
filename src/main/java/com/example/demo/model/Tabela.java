@@ -3,6 +3,7 @@ package com.example.demo.model;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -32,14 +33,22 @@ public class Tabela extends Base {
 	@Column(name = "nome", nullable = false)
 	private String nome;
 
-	@JsonBackReference(value="sistema_tabelas")
+	@JsonBackReference(value="funcaoDados_tabelas")
 	@ManyToOne
-	@JoinColumn(name="sistema_id", nullable=false)
-	private Sistema sistema;
+	@JoinColumn(name="funcaoDados_id", nullable=false)
+	private FuncaoDados funcaoDados;
 	
-	@JsonManagedReference(value="colunas")
+	@JsonManagedReference(value="tabela_colunas")
 	@OneToMany(mappedBy = "tabela")
 	private List<Coluna> colunas;
+
+	public List<Coluna> getColunas() {
+		return colunas;
+	}
+
+	public void setColunas(List<Coluna> colunas) {
+		this.colunas = colunas;
+	}
 
 	public long getId() {
 		return id;
@@ -56,23 +65,13 @@ public class Tabela extends Base {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
-	public Sistema getSistema() {
-		return sistema;
+	public FuncaoDados getFuncaoDados() {
+		return funcaoDados;
 	}
 
-	public void setSistema(Sistema sistema) {
-		this.sistema = sistema;
+	public void setFuncaoDados(FuncaoDados funcaoDados) {
+		this.funcaoDados = funcaoDados;
 	}
-
-	public List<Coluna> getColunas() {
-		return colunas;
-	}
-
-	public void setColunas(List<Coluna> colunas) {
-		this.colunas = colunas;
-	}
-
 
 	
 }

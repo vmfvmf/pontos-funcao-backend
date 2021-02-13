@@ -40,10 +40,6 @@ public class Sistema extends Base {
 	@OneToMany(mappedBy = "sistema")
 	private List<Contagem> contagens = new ArrayList<Contagem>();
 	
-	@JsonManagedReference("sistema_tabelas")
-	@OneToMany(mappedBy = "sistema")
-	private List<Tabela> tabelas = new ArrayList<Tabela>();
-
 	public List<Contagem> getContagens() {
 		return contagens;
 	}
@@ -75,14 +71,5 @@ public class Sistema extends Base {
 	public void setVersao(String versao) {
 		this.versao = versao;
 	}
-
-	public List<Tabela> getTabelas() {
-		return tabelas;
-	}
-
-	public void setTabelas(List<Tabela> tabelas) {
-		this.tabelas = tabelas;
-	}
-
 	
 }

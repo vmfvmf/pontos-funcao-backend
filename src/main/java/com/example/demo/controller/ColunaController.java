@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.Coluna;
+import com.example.demo.model.Tabela;
 import com.example.demo.service.ColunaService;
 
 @RestController
@@ -30,6 +31,11 @@ public class ColunaController {
 	public Optional<Coluna> getColunaById(@PathVariable Integer id){
 	        Optional<Coluna> d = colunaService.findById(id);
 	        return d;
+	    }
+	
+	@PostMapping("/colunas/emlote")
+	public List<Coluna> salvaEmLote( @RequestBody List<Coluna> colunas){
+		return colunaService.salvaEmLote(colunas);
 	    }
 	
 	@PostMapping("/colunas")

@@ -55,14 +55,14 @@ public class Contagem extends Base {
 	private EscopoContagemEnum escopo;
 	
 	@OneToMany(mappedBy = "contagem")
-	private List<ArquivoLogico> arquivosLogicos = new ArrayList<ArquivoLogico>();
+	private List<FuncaoDados> funcaoDados = new ArrayList<FuncaoDados>();
 
-	public List<ArquivoLogico> getArquivosLogicos() {
-		return arquivosLogicos;
+	public List<FuncaoDados> getFuncaoDados() {
+		return funcaoDados;
 	}
 
-	public void setArquivosLogicos(List<ArquivoLogico> arquivosLogicos) {
-		this.arquivosLogicos = arquivosLogicos;
+	public void setFuncaoDados(List<FuncaoDados> funcaoDados) {
+		this.funcaoDados = funcaoDados;
 	}
 
 	public long getId() {
