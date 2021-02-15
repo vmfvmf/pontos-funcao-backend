@@ -1,13 +1,11 @@
 package com.example.demo.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.example.demo.enums.FuncaoTransacaoEnum;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table
@@ -18,15 +16,15 @@ public class Transacao extends ItemContagem{
 	 */
 	private static final long serialVersionUID = 1822603001509468294L;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@JsonBackReference(value="grupo_transacoes")
+	@ManyToOne
 	@JoinColumn(name="grupo_id")
 	private GrupoTransacao grupo;
 	
-	@Column(name = "funcao")
-	private FuncaoTransacaoEnum funcao;
-	
-	@Column(name = "ar")
-	private Integer AR;
+//	@JsonManagedReference(value="transacao_td")
+//	@OneToMany(mappedBy = "transacao")
+//	private List<TransacaoTD> transacoesTD;
+		
 
 	public GrupoTransacao getGrupo() {
 		return grupo;
@@ -36,19 +34,12 @@ public class Transacao extends ItemContagem{
 		this.grupo = grupo;
 	}
 
-	public FuncaoTransacaoEnum getFuncao() {
-		return funcao;
-	}
+//	public List<TransacaoTD> getTransacoesTD() {
+//		return transacoesTD;
+//	}
+//
+//	public void setTransacoesTD(List<TransacaoTD> transacoesTD) {
+//		this.transacoesTD = transacoesTD;
+//	}
 
-	public void setFuncao(FuncaoTransacaoEnum funcao) {
-		this.funcao = funcao;
-	}
-
-	public Integer getAR() {
-		return AR;
-	}
-
-	public void setAR(Integer aR) {
-		AR = aR;
-	}
 }

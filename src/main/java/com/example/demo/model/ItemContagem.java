@@ -9,8 +9,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.example.demo.enums.FuncaoDados;
-import com.example.demo.enums.TipoItemContagemEnum;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
@@ -29,15 +27,21 @@ public abstract class ItemContagem extends Base {
 	@ManyToOne()
 	@JoinColumn(name="contagem_id", nullable=false)
 	private Contagem contagem;
-		
-	@Column(name = "valor")
-	private Integer valor;
 	
 	@Column(name = "nome")
 	private String nome;
 	
 	@Column(name = "td")
 	private Integer td;
+	
+	@Column(name = "tr")
+	private Integer tr;	
+	
+	@Column(name = "complexidade") // baixa média alta
+	private String complexidade;
+	
+	@Column(name = "pf")
+	private Integer pf;
 	
 	@Column(name = "contado")
 	private Boolean contado;
@@ -70,13 +74,6 @@ public abstract class ItemContagem extends Base {
 		this.id = id;
 	}
 
-	public Integer getValor() {
-		return valor;
-	}
-
-	public void setValor(Integer valor) {
-		this.valor = valor;
-	}
 
 	public String getNome() {
 		return nome;
@@ -92,6 +89,30 @@ public abstract class ItemContagem extends Base {
 
 	public void setTd(Integer td) {
 		this.td = td;
+	}
+	
+	public Integer getTr() {
+		return tr;
+	}
+
+	public void setTr(Integer tr) {
+		this.tr = tr;
+	}
+
+	public String getComplexidade() {
+		return complexidade;
+	}
+
+	public void setComplexidade(String complexidade) {
+		this.complexidade = complexidade;
+	}
+
+	public Integer getPf() {
+		return pf;
+	}
+
+	public void setPf(Integer pf) {
+		this.pf = pf;
 	}
 
 	public Boolean getContado() {

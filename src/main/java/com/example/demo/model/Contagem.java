@@ -1,6 +1,5 @@
 package com.example.demo.model;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +18,7 @@ import javax.persistence.UniqueConstraint;
 
 import com.example.demo.enums.EscopoContagemEnum;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @NamedQuery(name = "Contagem.joinSistema",
@@ -54,8 +54,16 @@ public class Contagem extends Base {
 	@Column(name = "escopo", nullable = false) // "0=sistema, 1=projeto, 2=sprint"
 	private EscopoContagemEnum escopo;
 	
+	@Column
+	private Integer totalPf;
+	
+	@JsonManagedReference(value="contagem_funcao_dados")
 	@OneToMany(mappedBy = "contagem")
-	private List<FuncaoDados> funcaoDados = new ArrayList<FuncaoDados>();
+	private List<FuncaoDados> funcaoDados;
+	
+	@JsonManagedReference(value="contagem_grupos")
+	@OneToMany(mappedBy = "contagem")
+	private List<GrupoTransacao> grupos;
 
 	public List<FuncaoDados> getFuncaoDados() {
 		return funcaoDados;
@@ -111,6 +119,22 @@ public class Contagem extends Base {
 
 	public void setEscopo(EscopoContagemEnum escopo) {
 		this.escopo = escopo;
+	}
+
+	public Integer getTotalPf() {
+		return totalPf;
+	}
+
+	public void setTotalPf(Integer totalPf) {
+		this.totalPf = totalPf;
+	}
+
+	public List<GrupoTransacao> getGrupos() {
+		return grupos;
+	}
+
+	public void setGrupos(List<GrupoTransacao> grupos) {
+		this.grupos = grupos;
 	}
 	
 }

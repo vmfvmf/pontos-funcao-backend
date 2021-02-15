@@ -9,6 +9,7 @@ import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.FuncaoDados;
+import com.example.demo.model.Tabela;
 import com.example.demo.repository.ArquivoLogicoRepository;
 
 @Service("arquivoLogicoService")
@@ -29,12 +30,11 @@ public class FuncaoDadosServiceImpl implements FuncaoDadosService{
 
 	@Override
 	public List<FuncaoDados> findAll(FuncaoDados filtro) {
-		ExampleMatcher mat = ExampleMatcher.matching().withIgnoreNullValues();
+		ExampleMatcher mat = ExampleMatcher.matching().withIgnoreNullValues().withIgnorePaths("id");
 		//withIgnorePaths(paths...)
 		Example<FuncaoDados> ex = Example.of(filtro, mat);
 		return arquivoLogicoRepository.findAll(ex);
 	}
-
 	@Override
 	public Optional<FuncaoDados> findById(long id) {
 		return arquivoLogicoRepository.findById(id);
