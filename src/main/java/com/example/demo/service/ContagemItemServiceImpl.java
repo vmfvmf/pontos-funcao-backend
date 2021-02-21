@@ -11,28 +11,27 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.model.Contagem;
-import com.example.demo.model.Sistema;
-import com.example.demo.repository.ContagemRepository;
+import com.example.demo.model.ContagemItem;
+import com.example.demo.repository.ContagemItemRepository;
 
-@Service("contagemService")
-public class ContagemServiceImpl implements ContagemService{
+@Service("contagemItemService")
+public class ContagemItemServiceImpl implements ContagemItemService{
 	
 	 @PersistenceContext
 	    public EntityManager em;
 
 	@Autowired
-	private ContagemRepository contagemItemRepository;
+	private ContagemItemRepository contagemItemRepository;
 		
 	@Override
-	public List<Contagem> findAll(Contagem filtro) {
+	public List<ContagemItem> findAll(ContagemItem filtro) {
 		ExampleMatcher mat = ExampleMatcher.matching().withIgnoreNullValues().withIgnorePaths("id");
-		Example<Contagem> ex = Example.of(filtro, mat);
+		Example<ContagemItem> ex = Example.of(filtro, mat);
 		return contagemItemRepository.findAll(ex);
 	}
 
 	@Override
-	public Contagem save(Contagem d) {
+	public ContagemItem save(ContagemItem d) {
 		return contagemItemRepository.save(d);
 	}
 	
@@ -42,19 +41,7 @@ public class ContagemServiceImpl implements ContagemService{
 	}
 
 	@Override
-	public Optional<Contagem> findById(long id) {
+	public Optional<ContagemItem> findById(long id) {
 		return contagemItemRepository.findById(id);
-	}
-
-	@Override
-	public Sistema findSistemaByContagemId(long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Contagem> findContagensSistemas() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

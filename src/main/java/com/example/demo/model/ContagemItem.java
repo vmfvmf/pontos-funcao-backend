@@ -1,5 +1,7 @@
 package com.example.demo.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,13 +9,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-@Entity
+import com.example.demo.enums.SubtipoContagemItemEnum;
+import com.example.demo.enums.TipoContagemItemEnum;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Table
-public abstract class ItemContagem extends Base {
+@Entity
+public class ContagemItem extends Base {
 	/**
 	 * 
 	 */
@@ -23,14 +31,12 @@ public abstract class ItemContagem extends Base {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	@JsonBackReference(value="contagem")
-	@ManyToOne()
-	@JoinColumn(name="contagem_id", nullable=false)
-	private Contagem contagem;
-	
 	@Column(name = "nome")
 	private String nome;
 	
+	@Column(name = "tipo")
+	private String tipo;
+		
 	@Column(name = "td")
 	private Integer td;
 	
@@ -42,21 +48,18 @@ public abstract class ItemContagem extends Base {
 	
 	@Column(name = "pf")
 	private Integer pf;
-	
-	@Column(name = "contado")
-	private Boolean contado;
-	
+		
 	@Column(name = "subtipo") // EE, SE, CE para Transação / ALI, AIE para ArquivoLógico
 	private String subtipo;
-
-
-	public Contagem getContagem() {
-		return contagem;
-	}
-
-	public void setContagem(Contagem contagem) {
-		this.contagem = contagem;
-	}
+	
+	@ManyToOne
+	@JsonIgnoreProperties("contagemItens")
+	@JoinColumn(name="contagem_id")
+	private Contagem contagem;
+	
+	@JsonIgnoreProperties("contagemItem")
+	@OneToMany(mappedBy = "contagemItem")
+	private List<Tabela> tabelas;
 
 	public String getSubtipo() {
 		return subtipo;
@@ -73,7 +76,14 @@ public abstract class ItemContagem extends Base {
 	public void setId(long id) {
 		this.id = id;
 	}
+	
+	public String getTipo() {
+		return tipo;
+	}
 
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
 
 	public String getNome() {
 		return nome;
@@ -115,12 +125,20 @@ public abstract class ItemContagem extends Base {
 		this.pf = pf;
 	}
 
-	public Boolean getContado() {
-		return contado;
+	public Contagem getContagem() {
+		return contagem;
 	}
 
-	public void setContado(Boolean contado) {
-		this.contado = contado;
+	public void setContagem(Contagem contagem) {
+		this.contagem = contagem;
+	}
+
+	public List<Tabela> getTabelas() {
+		return tabelas;
+	}
+
+	public void setTabelas(List<Tabela> tabelas) {
+		this.tabelas = tabelas;
 	}
 	
 }

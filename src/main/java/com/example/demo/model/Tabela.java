@@ -3,7 +3,6 @@ package com.example.demo.model;
 import java.util.List;
 
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,8 +12,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 @Entity
@@ -33,12 +34,12 @@ public class Tabela extends Base {
 	@Column(name = "nome", nullable = false)
 	private String nome;
 
-	@JsonBackReference(value="funcaoDados_tabelas")
 	@ManyToOne
-	@JoinColumn(name="funcaoDados_id", nullable=false)
-	private FuncaoDados funcaoDados;
+	@JsonIgnoreProperties("tabelas")
+	@JoinColumn(name="contagem_item_id")
+	private ContagemItem contagemItem;
 	
-	@JsonManagedReference(value="tabela_colunas")
+	@JsonIgnoreProperties("tabela")
 	@OneToMany(mappedBy = "tabela")
 	private List<Coluna> colunas;
 
@@ -48,6 +49,14 @@ public class Tabela extends Base {
 
 	public void setColunas(List<Coluna> colunas) {
 		this.colunas = colunas;
+	}
+
+	public ContagemItem getContagemItem() {
+		return contagemItem;
+	}
+
+	public void setContagemItem(ContagemItem contagemItem) {
+		this.contagemItem = contagemItem;
 	}
 
 	public long getId() {
@@ -64,13 +73,6 @@ public class Tabela extends Base {
 
 	public void setNome(String nome) {
 		this.nome = nome;
-	}
-	public FuncaoDados getFuncaoDados() {
-		return funcaoDados;
-	}
-
-	public void setFuncaoDados(FuncaoDados funcaoDados) {
-		this.funcaoDados = funcaoDados;
 	}
 
 	

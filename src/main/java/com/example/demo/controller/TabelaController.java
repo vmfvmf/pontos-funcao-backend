@@ -43,11 +43,6 @@ public class TabelaController {
 		return tabelaService.salvaEmLote(tabelas);
 	    }
 	
-	@PutMapping("/tabelas")
-	public Tabela updateTabela( @RequestBody Tabela tabela){
-		Tabela s = tabelaService.save(tabela);
-	        return s;
-	    }
 	
 	 @DeleteMapping("/tabelas/{id}")
 	public void deleteTabela(@PathVariable Integer id){

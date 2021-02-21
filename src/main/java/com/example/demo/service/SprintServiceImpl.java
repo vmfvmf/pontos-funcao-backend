@@ -29,7 +29,7 @@ public class SprintServiceImpl implements SprintService{
 
 	@Override
 	public List<Sprint> findAll(Sprint filtro) {
-		ExampleMatcher mat = ExampleMatcher.matching().withIgnoreNullValues();
+		ExampleMatcher mat = ExampleMatcher.matching().withIgnoreNullValues().withIgnorePaths("id");
 		//withIgnorePaths(paths...)
 		Example<Sprint> ex = Example.of(filtro, mat);
 		return sprintRepository.findAll(ex);

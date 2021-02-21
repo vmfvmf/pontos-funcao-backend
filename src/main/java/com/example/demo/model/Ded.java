@@ -1,21 +1,15 @@
 package com.example.demo.model;
 
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 
 @Entity
-@Table(name = "tb_ded")
+@Table
 public class Ded extends Base{
 
 	/**
@@ -32,19 +26,7 @@ public class Ded extends Base{
 	
 	@Column(nullable = false, name = "descricao")
 	private String descricao;
-	
-	@OneToMany(mappedBy = "ded", fetch = FetchType.LAZY)
-	@JsonManagedReference
-	private List<Sprint> sprints;
-	
-	public List<Sprint> getSprints() {
-		return sprints;
-	}
-
-	public void setSprints(List<Sprint> sprints) {
-		this.sprints = sprints;
-	}
-
+		
 	public long getId() {
 		return id;
 	}

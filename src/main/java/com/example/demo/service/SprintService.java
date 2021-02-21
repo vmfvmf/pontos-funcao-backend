@@ -8,7 +8,7 @@ import com.example.demo.model.Sprint;
 
 
 public interface SprintService {
-	public List<Sprint> findAll(Sprint flitro);
+	public List<Sprint> findAll(Sprint filtro);
 	public Sprint save(Sprint s);
 	public void deleteById(long id);
 	public Optional<Sprint> findById(long id);

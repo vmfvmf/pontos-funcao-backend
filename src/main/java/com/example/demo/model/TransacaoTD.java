@@ -1,17 +1,24 @@
 package com.example.demo.model;
 
-import javax.persistence.Entity;
+import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.example.demo.enums.TipoTransacaoTDEnum;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@Entity
+
 @Table
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@MappedSuperclass
 public abstract class TransacaoTD extends Base {
 
 	/**
@@ -23,10 +30,31 @@ public abstract class TransacaoTD extends Base {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	@JsonBackReference(value="transacao_td")
+	@Column
+	private TipoTransacaoTDEnum tipoTransacaoTd;
+	
+	@JsonIgnoreProperties("transacao")
 	@ManyToOne
 	@JoinColumn(name="transacao_id", nullable=false)
-	private Transacao transacao;
+	private ContagemItem transacao;
+	
+	@JsonIgnoreProperties("coluna")
+	@OneToOne
+	@JoinColumn(name="coluna_id")
+	private Coluna coluna;
+	
+	@OneToOne
+	@JoinColumn(name="mensagem_tela_id", nullable=false)
+	private MensagemTela mensagemTela;
+	
+	
+	public TipoTransacaoTDEnum getTipoTransacaoTd() {
+		return tipoTransacaoTd;
+	}
+
+	public void setTipoTransacaoTd(TipoTransacaoTDEnum tipoTransacaoTd) {
+		this.tipoTransacaoTd = tipoTransacaoTd;
+	}
 
 	public long getId() {
 		return id;
@@ -36,12 +64,20 @@ public abstract class TransacaoTD extends Base {
 		this.id = id;
 	}
 
-	public Transacao getTransacao() {
+	public ContagemItem getTransacao() {
 		return transacao;
 	}
 
-	public void setTransacao(Transacao transacao) {
+	public void setTransacao(ContagemItem transacao) {
 		this.transacao = transacao;
+	}
+
+	public Coluna getColuna() {
+		return coluna;
+	}
+
+	public void setColuna(Coluna coluna) {
+		this.coluna = coluna;
 	}
 	
 }

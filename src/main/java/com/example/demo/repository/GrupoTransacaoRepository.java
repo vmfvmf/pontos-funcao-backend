@@ -3,10 +3,10 @@ package com.example.demo.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.demo.model.GrupoTransacao;
+import com.example.demo.model.Grupo;
 
 
 
 @Repository("grupoTransacaoRepository")
-public interface GrupoTransacaoRepository extends JpaRepository<GrupoTransacao, Long> {
+public interface GrupoTransacaoRepository extends JpaRepository<Grupo, Long> {
 }

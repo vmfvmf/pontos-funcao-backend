@@ -1,9 +1,6 @@
 package com.example.demo.model;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,7 +11,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table
@@ -36,18 +33,6 @@ public class Sistema extends Base {
 	@Column(name = "versao", nullable = false)
 	private String versao;
 	
-	@JsonManagedReference("sistema_contagens")
-	@OneToMany(mappedBy = "sistema")
-	private List<Contagem> contagens = new ArrayList<Contagem>();
-	
-	public List<Contagem> getContagens() {
-		return contagens;
-	}
-
-	public void setContagens(List<Contagem> contagens) {
-		this.contagens = contagens;
-	}
-
 	public long getId() {
 		return id;
 	}

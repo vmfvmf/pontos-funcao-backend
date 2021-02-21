@@ -1,30 +1,24 @@
 package com.example.demo.model;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
-import com.example.demo.enums.EscopoContagemEnum;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @NamedQuery(name = "Contagem.joinSistema",
 query = "SELECT c FROM Contagem c INNER JOIN FETCH c.sistema s where c.escopo = ?1")
-@Table(uniqueConstraints=
-        @UniqueConstraint(columnNames={"sistema_id", "sprint_id", "escopo"}))
+@Table
 public class Contagem extends Base {
 	/**
 	 * 
@@ -35,15 +29,10 @@ public class Contagem extends Base {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	@JsonBackReference(value="sistema_contagens")
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne
 	@JoinColumn(name="sistema_id", nullable=false)
+	@JsonIgnoreProperties("contagens")
 	private Sistema sistema;
-
-	@JsonBackReference(value="sprint")
-	@ManyToOne()
-	@JoinColumn(name="sprint_id", nullable=false)
-	private Sprint sprint;
 	
 	@Column(name = "contador", nullable = false)
 	private String contador;
@@ -52,27 +41,37 @@ public class Contagem extends Base {
 	private Date dataContagem;
 	
 	@Column(name = "escopo", nullable = false) // "0=sistema, 1=projeto, 2=sprint"
-	private EscopoContagemEnum escopo;
+	private String escopo;
 	
 	@Column
 	private Integer totalPf;
 	
-	@JsonManagedReference(value="contagem_funcao_dados")
-	@OneToMany(mappedBy = "contagem")
-	private List<FuncaoDados> funcaoDados;
+	@OneToOne
+	@JoinColumn(name="ded_id")
+	@JsonIgnoreProperties("contagem")
+	private Ded ded;
+
+	@ManyToOne
+	@JoinColumn(name="sprint_id")
+	@JsonIgnoreProperties("contagem")
+	private Sprint sprint;
+
+	public Sprint getSprint() {
+		return sprint;
+	}
+
+	public void setSprint(Sprint sprint) {
+		this.sprint = sprint;
+	}
 	
-	@JsonManagedReference(value="contagem_grupos")
-	@OneToMany(mappedBy = "contagem")
-	private List<GrupoTransacao> grupos;
-
-	public List<FuncaoDados> getFuncaoDados() {
-		return funcaoDados;
+	public Ded getDed() {
+		return ded;
 	}
 
-	public void setFuncaoDados(List<FuncaoDados> funcaoDados) {
-		this.funcaoDados = funcaoDados;
-	}
-
+	public void setDed(Ded ded) {
+		this.ded = ded;
+	}	
+		
 	public long getId() {
 		return id;
 	}
@@ -87,14 +86,6 @@ public class Contagem extends Base {
 
 	public void setSistema(Sistema sistema) {
 		this.sistema = sistema;
-	}
-
-	public Sprint getSprint() {
-		return sprint;
-	}
-
-	public void setSprint(Sprint sprint) {
-		this.sprint = sprint;
 	}
 
 	public String getContador() {
@@ -113,11 +104,11 @@ public class Contagem extends Base {
 		this.dataContagem = dataContagem;
 	}
 
-	public EscopoContagemEnum getEscopo() {
+	public String getEscopo() {
 		return escopo;
 	}
 
-	public void setEscopo(EscopoContagemEnum escopo) {
+	public void setEscopo(String escopo) {
 		this.escopo = escopo;
 	}
 
@@ -127,14 +118,6 @@ public class Contagem extends Base {
 
 	public void setTotalPf(Integer totalPf) {
 		this.totalPf = totalPf;
-	}
-
-	public List<GrupoTransacao> getGrupos() {
-		return grupos;
-	}
-
-	public void setGrupos(List<GrupoTransacao> grupos) {
-		this.grupos = grupos;
 	}
 	
 }
