@@ -9,10 +9,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
@@ -35,7 +31,6 @@ public class Coluna extends Base {
 	@JsonIgnoreProperties("colunas")
 	@ManyToOne
 	@JoinColumn(name="tabela_id", nullable=false)
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Tabela tabela;
 	
 

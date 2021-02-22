@@ -4,12 +4,16 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceUnit;
 
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.model.ContagemItem;
 import com.example.demo.repository.ContagemItemRepository;
@@ -17,8 +21,8 @@ import com.example.demo.repository.ContagemItemRepository;
 @Service("contagemItemService")
 public class ContagemItemServiceImpl implements ContagemItemService{
 	
-	 @PersistenceContext
-	    public EntityManager em;
+	@PersistenceUnit
+	private EntityManagerFactory entityManagerFactory;
 
 	@Autowired
 	private ContagemItemRepository contagemItemRepository;
@@ -31,8 +35,8 @@ public class ContagemItemServiceImpl implements ContagemItemService{
 	}
 
 	@Override
-	public ContagemItem save(ContagemItem d) {
-		return contagemItemRepository.save(d);
+	public ContagemItem save(ContagemItem item) {
+		return contagemItemRepository.save(item);
 	}
 	
 	@Override
@@ -43,5 +47,22 @@ public class ContagemItemServiceImpl implements ContagemItemService{
 	@Override
 	public Optional<ContagemItem> findById(long id) {
 		return contagemItemRepository.findById(id);
+	}
+
+	@Override
+	@Transactional
+	public void apagaTdsByContagemItem(long item_id) {
+		EntityManager em = entityManagerFactory.createEntityManager();
+		EntityTransaction tx = null;
+//		Session session = null;
+		try{
+//		       session = em.unwrap(Session.class);
+		       tx = em.getTransaction();
+		       tx.begin();
+		       em.createQuery("delete from TransacaoTD td where td.contagemItem.id = :id")
+				.setParameter("id", item_id)
+				  .executeUpdate();
+		       tx.commit();
+		}catch(Exception e) { }		
 	}
 }

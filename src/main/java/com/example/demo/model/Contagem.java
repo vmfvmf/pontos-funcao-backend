@@ -55,6 +55,17 @@ public class Contagem extends Base {
 	@JoinColumn(name="sprint_id")
 	@JsonIgnoreProperties("contagem")
 	private Sprint sprint;
+	
+//	@OneToMany(mappedBy = "contagem", cascade = {CascadeType.ALL})
+//	private List<ContagemItem> contagemItens;
+
+//	public List<ContagemItem> getContagemItens() {
+//		return contagemItens;
+//	}
+//	
+//	public void addToContagemItens(ContagemItem item) {
+//		this.contagemItens.add(item);
+//	}
 
 	public Sprint getSprint() {
 		return sprint;

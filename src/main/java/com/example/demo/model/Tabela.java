@@ -1,7 +1,9 @@
 package com.example.demo.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,9 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -40,8 +39,8 @@ public class Tabela extends Base {
 	private ContagemItem contagemItem;
 	
 	@JsonIgnoreProperties("tabela")
-	@OneToMany(mappedBy = "tabela")
-	private List<Coluna> colunas;
+	@OneToMany(mappedBy = "tabela", cascade = {CascadeType.ALL})
+	private List<Coluna> colunas = new ArrayList<>();
 
 	public List<Coluna> getColunas() {
 		return colunas;

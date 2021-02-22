@@ -10,4 +10,5 @@ public interface ContagemItemService {
 	public ContagemItem save(ContagemItem d);
 	public void deleteById(long id);
 	public Optional<ContagemItem> findById(long id);
+	public void apagaTdsByContagemItem(long item_id);
 }

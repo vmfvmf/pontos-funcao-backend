@@ -1,25 +1,21 @@
 package com.example.demo.model;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.example.demo.enums.TipoTransacaoTDEnum;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
-@Table
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@MappedSuperclass
-public abstract class TransacaoTD extends Base {
+@Table(name = "transacao_td")
+@Entity
+public class TransacaoTD extends Base {
 
 	/**
 	 * 
@@ -28,49 +24,49 @@ public abstract class TransacaoTD extends Base {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Long id;
 	
 	@Column
-	private TipoTransacaoTDEnum tipoTransacaoTd;
+	private String tipo;
 	
-	@JsonIgnoreProperties("transacao")
 	@ManyToOne
-	@JoinColumn(name="transacao_id", nullable=false)
-	private ContagemItem transacao;
+	@JsonIgnoreProperties("transacaoTDs")
+	@JoinColumn(name="contagem_item_id")
+	private ContagemItem contagemItem;
 	
-	@JsonIgnoreProperties("coluna")
 	@OneToOne
+	@JsonIgnoreProperties("tabela")
 	@JoinColumn(name="coluna_id")
 	private Coluna coluna;
 	
 	@OneToOne
-	@JoinColumn(name="mensagem_tela_id", nullable=false)
+	@JoinColumn(name="mensagem_tela_id")
 	private MensagemTela mensagemTela;
 	
-	
-	public TipoTransacaoTDEnum getTipoTransacaoTd() {
-		return tipoTransacaoTd;
-	}
-
-	public void setTipoTransacaoTd(TipoTransacaoTDEnum tipoTransacaoTd) {
-		this.tipoTransacaoTd = tipoTransacaoTd;
-	}
-
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public MensagemTela getMensagemTela() {
+		return mensagemTela;
+	}
+
+	public void setMensagemTela(MensagemTela mensagemTela) {
+		this.mensagemTela = mensagemTela;
+	}
+
+	public ContagemItem getContagemItem() {
+		return contagemItem;
+	}
+
+	public void setContagemItem(ContagemItem contagemItem) {
+		this.contagemItem = contagemItem;
+	}
+
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public ContagemItem getTransacao() {
-		return transacao;
-	}
-
-	public void setTransacao(ContagemItem transacao) {
-		this.transacao = transacao;
-	}
 
 	public Coluna getColuna() {
 		return coluna;
@@ -78,6 +74,14 @@ public abstract class TransacaoTD extends Base {
 
 	public void setColuna(Coluna coluna) {
 		this.coluna = coluna;
+	}
+
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
 	}
 	
 }

@@ -2,6 +2,7 @@ package com.example.demo.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,11 +13,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
-import com.example.demo.enums.SubtipoContagemItemEnum;
-import com.example.demo.enums.TipoContagemItemEnum;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Table
@@ -53,13 +49,37 @@ public class ContagemItem extends Base {
 	private String subtipo;
 	
 	@ManyToOne
-	@JsonIgnoreProperties("contagemItens")
 	@JoinColumn(name="contagem_id")
 	private Contagem contagem;
 	
+	@ManyToOne
+	@JoinColumn(name="grupo_id")
+	private Grupo grupo;
+	
 	@JsonIgnoreProperties("contagemItem")
-	@OneToMany(mappedBy = "contagemItem")
+	@OneToMany(mappedBy = "contagemItem", cascade = {CascadeType.ALL})
 	private List<Tabela> tabelas;
+	
+	
+	@JsonIgnoreProperties("contagemItem")
+	@OneToMany(mappedBy = "contagemItem", cascade = {CascadeType.ALL})
+	private List<TransacaoTD> transacaoTDs;
+
+	public List<TransacaoTD> getTransacaoTDs() {
+		return transacaoTDs;
+	}
+
+	public void setTransacaoTDs(List<TransacaoTD> transacaoTDs) {
+		this.transacaoTDs = transacaoTDs;
+	}
+
+	public Grupo getGrupo() {
+		return grupo;
+	}
+
+	public void setGrupo(Grupo grupo) {
+		this.grupo = grupo;
+	}
 
 	public String getSubtipo() {
 		return subtipo;
@@ -137,8 +157,8 @@ public class ContagemItem extends Base {
 		return tabelas;
 	}
 
-	public void setTabelas(List<Tabela> tabelas) {
-		this.tabelas = tabelas;
+	public void addToTabelas(Tabela tabela) {
+		this.tabelas.add(tabela);
 	}
 	
 }

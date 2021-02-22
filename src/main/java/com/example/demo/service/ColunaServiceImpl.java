@@ -38,11 +38,4 @@ public class ColunaServiceImpl implements ColunaService{
 	public Optional<Coluna> findById(long id) {
 		return colunaRepository.findById(id);
 	}
-
-	@Override
-	public List<Coluna> salvaEmLote(List<Coluna> colunas) {
-		return colunaRepository.saveAll(colunas);
-	}
-
-
 }

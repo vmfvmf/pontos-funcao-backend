@@ -31,11 +31,6 @@ public class ColunaController {
 	        return d;
 	    }
 	
-	@PostMapping("/colunas/emlote")
-	public List<Coluna> salvaEmLote( @RequestBody List<Coluna> colunas){
-		return colunaService.salvaEmLote(colunas);
-	    }
-	
 	@PostMapping("/colunas")
 	public Coluna novoColuna( @RequestBody Coluna coluna){
 		Coluna s = colunaService.save(coluna);

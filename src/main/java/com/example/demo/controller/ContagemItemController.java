@@ -11,17 +11,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.model.Coluna;
 import com.example.demo.model.ContagemItem;
+import com.example.demo.model.Tabela;
+import com.example.demo.model.TransacaoTD;
 import com.example.demo.service.ContagemItemService;
-import com.example.demo.service.TabelaService;
 
 @RestController
 public class ContagemItemController {
 
 	@Autowired
 	private ContagemItemService contagemItemService;
-	@Autowired
-	private TabelaService tabelaService;
 
 	@GetMapping("/contagem_item")
 	public List<ContagemItem> findAll(ContagemItem filtro) {
@@ -33,13 +33,27 @@ public class ContagemItemController {
 		return contagemItemService.findById(id);
 	}
 	
-	@PostMapping("/contagem_item")
-	public ContagemItem save(@RequestBody ContagemItem contagem) {
-		ContagemItem salvo = contagemItemService.save(contagem);
-		salvo.setTabelas(contagem.getTabelas());
-		
-		
+	@PostMapping("/contagem_item")	
+	public ContagemItem save(@RequestBody ContagemItem item) {
+		if(item.getTabelas() != null)
+			for(Tabela t: item.getTabelas()) {
+				t.setContagemItem(item);
+				for(Coluna c : t.getColunas()) {
+					c.setTabela(t);
+				}
+			}
+		if(item.getTransacaoTDs() != null) {
+			for(TransacaoTD td: item.getTransacaoTDs()) {
+				td.setContagemItem(item);
+			}		
+		}	
+		ContagemItem salvo = contagemItemService.save(item);
 		return salvo;
+	}
+	
+	@DeleteMapping("/contagem_item/tds/{item_id}")
+	public void delete2(@PathVariable Integer item_id) {
+		contagemItemService.apagaTdsByContagemItem(item_id);
 	}
 
 	@DeleteMapping("/contagem_item/{id}")
