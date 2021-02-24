@@ -39,20 +39,8 @@ public class TransacaoTD extends Base {
 	@JoinColumn(name="coluna_id")
 	private Coluna coluna;
 	
-	@OneToOne
-	@JoinColumn(name="mensagem_tela_id")
-	private MensagemTela mensagemTela;
-	
 	public Long getId() {
 		return id;
-	}
-
-	public MensagemTela getMensagemTela() {
-		return mensagemTela;
-	}
-
-	public void setMensagemTela(MensagemTela mensagemTela) {
-		this.mensagemTela = mensagemTela;
 	}
 
 	public ContagemItem getContagemItem() {
