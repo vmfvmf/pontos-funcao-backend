@@ -1,5 +1,7 @@
 package com.example.demo;
 
+import org.modelmapper.ModelMapper;
+import org.modelmapper.config.Configuration.AccessLevel;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -9,12 +11,72 @@ import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.example.demo.mappers.AbstractContagemItemMapper;
+import com.example.demo.mappers.ContagemItemArquivoReferenciadoMapper;
+import com.example.demo.mappers.ContagemItemTransacaoMapper;
+import com.example.demo.mappers.ContagemMapper;
+import com.example.demo.mappers.ProjetoMapper;
+import com.example.demo.mappers.GrupoMapper;
+import com.example.demo.mappers.SistemaMapper;
+import com.example.demo.mappers.SprintMapper;
+
 @SpringBootApplication
 public class DemoApplication {
-
+	@Bean
+	public ModelMapper modelMapper() {
+		ModelMapper modelMapper = new ModelMapper();
+		modelMapper.getConfiguration()
+		  .setFieldMatchingEnabled(true)
+		  .setFieldAccessLevel(AccessLevel.PRIVATE)
+		  .setSkipNullEnabled(true);
+	    return modelMapper;
+	}
+	
+	@Bean
+	public ProjetoMapper dedMapper() {
+	    return new ProjetoMapper();
+	}
+	
+	@Bean
+	public SistemaMapper sistemaMapper() {
+	    return new SistemaMapper();
+	}
+	
+	@Bean
+	public SprintMapper sprintMapper() {
+	    return new SprintMapper();
+	}
+	
+	@Bean
+	public ContagemMapper contagemMapper() {
+	    return new ContagemMapper();
+	}
+	
+	@Bean
+	public AbstractContagemItemMapper abstractContagemItemMapper() {
+	    return new AbstractContagemItemMapper();
+	}
+	
+	@Bean
+	public ContagemItemTransacaoMapper contagemItemTransacaoMapper() {
+	    return new ContagemItemTransacaoMapper();
+	}
+	
+	@Bean
+	public ContagemItemArquivoReferenciadoMapper contagemItemArquivoReferenciadoMapper() {
+	    return new ContagemItemArquivoReferenciadoMapper();
+	}
+	
+	@Bean
+	public GrupoMapper grupoMapper() {
+	    return new GrupoMapper();
+	}
+	
 	public static void main(String[] args) {
+		
 		SpringApplication.run(DemoApplication.class, args);
 	}
+	
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
@@ -29,6 +91,7 @@ public class DemoApplication {
             }
         };
     }
+	
 	@Bean
 	public CorsFilter corsFilter() {
 

@@ -20,14 +20,14 @@ public class Sistema extends Base {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private long id; 
 	
 	@Column(name = "nome", nullable = false)
 	private String nome;
 	
 	@Column(name = "versao", nullable = false)
 	private String versao;
-	
+
 	public long getId() {
 		return id;
 	}

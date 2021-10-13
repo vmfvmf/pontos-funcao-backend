@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import com.example.demo.model.TransacaoTD;
 
-
 @Repository("transacaoTDRepository")
 public interface TransacaoTDRepository extends JpaRepository<TransacaoTD, Long> {
 }

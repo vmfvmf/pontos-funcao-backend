@@ -14,8 +14,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 
 @Entity
 @Table
@@ -28,19 +26,25 @@ public class Tabela extends Base {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Long id;
 	
 	@Column(name = "nome", nullable = false)
 	private String nome;
-
-	@ManyToOne
-	@JsonIgnoreProperties("tabelas")
-	@JoinColumn(name="contagem_item_id")
-	private ContagemItem contagemItem;
 	
-	@JsonIgnoreProperties("tabela")
-	@OneToMany(mappedBy = "tabela", cascade = {CascadeType.ALL})
+	@OneToMany(mappedBy = "tabela", cascade = {CascadeType.ALL}, orphanRemoval = true)
 	private List<Coluna> colunas = new ArrayList<>();
+	
+	@ManyToOne
+	@JoinColumn(name="contagem_item_id")
+	private ContagemItemArquivoReferenciado arquivoReferenciado;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public List<Coluna> getColunas() {
 		return colunas;
@@ -50,28 +54,20 @@ public class Tabela extends Base {
 		this.colunas = colunas;
 	}
 
-	public ContagemItem getContagemItem() {
-		return contagemItem;
-	}
-
-	public void setContagemItem(ContagemItem contagemItem) {
-		this.contagemItem = contagemItem;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
 	public String getNome() {
 		return nome;
 	}
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	public ContagemItemArquivoReferenciado getArquivoReferenciado() {
+		return arquivoReferenciado;
+	}
+
+	public void setArquivoReferenciado(ContagemItemArquivoReferenciado arquivoReferenciado) {
+		this.arquivoReferenciado = arquivoReferenciado;
 	}
 
 	

@@ -1,23 +1,26 @@
 package com.example.demo.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.example.demo.enums.ContagemEstado;
 
 @Entity
-@NamedQuery(name = "Contagem.joinSistema",
-query = "SELECT c FROM Contagem c INNER JOIN FETCH c.sistema s where c.escopo = ?1")
 @Table
 public class Contagem extends Base {
 	/**
@@ -27,11 +30,10 @@ public class Contagem extends Base {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
-
+	private Long id;
+	
 	@ManyToOne
 	@JoinColumn(name="sistema_id", nullable=false)
-	@JsonIgnoreProperties("contagens")
 	private Sistema sistema;
 	
 	@Column(name = "contador", nullable = false)
@@ -40,32 +42,50 @@ public class Contagem extends Base {
 	@Column(name = "data_contagem", nullable = false)
 	private Date dataContagem;
 	
+	@Column(name = "total_pontos_funcao")
+	private Integer totalPontosFuncao;
+	
 	@Column(name = "escopo", nullable = false) // "0=sistema, 1=projeto, 2=sprint"
 	private String escopo;
 	
-	@Column
-	private Integer totalPf;
-	
 	@OneToOne
-	@JoinColumn(name="ded_id")
-	@JsonIgnoreProperties("contagem")
-	private Ded ded;
+	@JoinColumn(name="projeto_id")
+	private Projeto projeto;
 
 	@ManyToOne
 	@JoinColumn(name="sprint_id")
-	@JsonIgnoreProperties("contagem")
 	private Sprint sprint;
 	
-//	@OneToMany(mappedBy = "contagem", cascade = {CascadeType.ALL})
-//	private List<ContagemItem> contagemItens;
+	@Column
+	@Enumerated(EnumType.STRING)
+	private ContagemEstado estado;
+	
+	@OneToMany(cascade = {CascadeType.ALL}, orphanRemoval = true)
+	@JoinColumn(name = "contagem_id")
+	private List<ContagemItemTransacao> transacoes = new ArrayList<>();
+	
+	@OneToMany(cascade = {CascadeType.ALL}, orphanRemoval = true)
+	@JoinColumn(name = "contagem_id")
+	private List<ContagemItemArquivoReferenciado> arquivosReferenciados = new ArrayList<>();
+	
+	@Column
+	private Integer versao;
+	
+	public Long getId() {
+		return id;
+	}
 
-//	public List<ContagemItem> getContagemItens() {
-//		return contagemItens;
-//	}
-//	
-//	public void addToContagemItens(ContagemItem item) {
-//		this.contagemItens.add(item);
-//	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Integer getTotalPontosFuncao() {
+		return totalPontosFuncao;
+	}
+
+	public void setTotalPontosFuncao(Integer totalPontosFuncao) {
+		this.totalPontosFuncao = totalPontosFuncao;
+	}
 
 	public Sprint getSprint() {
 		return sprint;
@@ -74,21 +94,13 @@ public class Contagem extends Base {
 	public void setSprint(Sprint sprint) {
 		this.sprint = sprint;
 	}
-	
-	public Ded getDed() {
-		return ded;
-	}
-
-	public void setDed(Ded ded) {
-		this.ded = ded;
-	}	
 		
-	public long getId() {
-		return id;
+	public Projeto getProjeto() {
+		return projeto;
 	}
 
-	public void setId(long id) {
-		this.id = id;
+	public void setProjeto(Projeto projeto) {
+		this.projeto = projeto;
 	}
 
 	public Sistema getSistema() {
@@ -123,12 +135,36 @@ public class Contagem extends Base {
 		this.escopo = escopo;
 	}
 
-	public Integer getTotalPf() {
-		return totalPf;
+	public ContagemEstado getEstado() {
+		return estado;
 	}
 
-	public void setTotalPf(Integer totalPf) {
-		this.totalPf = totalPf;
+	public void setEstado(ContagemEstado estado) {
+		this.estado = estado;
+	}
+
+	public Integer getVersao() {
+		return versao;
+	}
+
+	public void setVersao(Integer versao) {
+		this.versao = versao;
+	}
+
+	public List<ContagemItemTransacao> getTransacoes() {
+		return transacoes;
+	}
+
+	public void setTransacoes(List<ContagemItemTransacao> transacoes) {
+		this.transacoes = transacoes;
+	}
+
+	public List<ContagemItemArquivoReferenciado> getArquivosReferenciados() {
+		return arquivosReferenciados;
+	}
+
+	public void setArquivosReferenciados(List<ContagemItemArquivoReferenciado> arquivosReferenciados) {
+		this.arquivosReferenciados = arquivosReferenciados;
 	}
 	
 }

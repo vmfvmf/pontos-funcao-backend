@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import com.example.demo.model.Sprint;
 
-
 @Repository("sprintRepository")
 public interface SprintRepository extends JpaRepository<Sprint, Long> {
 }

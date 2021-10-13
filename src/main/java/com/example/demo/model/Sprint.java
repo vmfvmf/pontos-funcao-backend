@@ -20,11 +20,11 @@ public class Sprint extends Base {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 6696627300095246781L;
+	private static final long serialVersionUID = 6696627300095246781L;	
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Long id;
 	
 	@Column(name = "numero", nullable = false)
 	private Integer numero;
@@ -39,26 +39,23 @@ public class Sprint extends Base {
 	private Integer diasUteis;
 	
 	@ManyToOne()
-	@JoinColumn(name="ded_id", nullable=false)
-	@JsonIgnoreProperties("sprints")
-	private Ded ded;
-
+	@JoinColumn(name="projeto_id", nullable=false)
+	private Projeto projeto;
 	
-	
-	public Ded getDed() {
-		return ded;
-	}
-
-	public void setDed(Ded ded) {
-		this.ded = ded;
-	}
-
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public Projeto getProjeto() {
+		return projeto;
+	}
+
+	public void setProjeto(Projeto projeto) {
+		this.projeto = projeto;
 	}
 
 	public Integer getNumero() {

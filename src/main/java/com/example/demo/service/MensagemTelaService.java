@@ -1,13 +1,17 @@
 package com.example.demo.service;
 
-import java.util.List;
-import java.util.Optional;
+import org.springframework.stereotype.Service;
 
 import com.example.demo.model.MensagemTela;
 
-public interface MensagemTelaService {
-	public List<MensagemTela> findAll(MensagemTela filtro);
-	public MensagemTela save(MensagemTela d);
-	public void deleteById(long id);
-	public Optional<MensagemTela> findById(long id);
+@Service("mensagemTelaService")
+public class MensagemTelaService extends AbstractService<MensagemTela>{
+
+
+	@Override
+	public void prepareToSave(MensagemTela entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -14,6 +14,7 @@ public class MensagemTela extends Base{
 	 * 
 	 */
 	private static final long serialVersionUID = 8209734799987984125L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;

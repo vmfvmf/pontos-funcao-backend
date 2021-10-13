@@ -1,13 +1,17 @@
 package com.example.demo.service;
 
-import java.util.List;
-import java.util.Optional;
+import org.springframework.stereotype.Service;
 
 import com.example.demo.model.Sistema;
 
-public interface SistemaService {
-	public List<Sistema> findAll();
-	public Sistema save(Sistema s);
-	public void deleteById(long id);
-	public Optional<Sistema> findById(long id);
+@Service("sistemaService")
+public class SistemaService extends AbstractService<Sistema>{
+
+
+	@Override
+	public void prepareToSave(Sistema entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

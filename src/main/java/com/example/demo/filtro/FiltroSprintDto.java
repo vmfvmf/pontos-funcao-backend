@@ -2,7 +2,7 @@ package com.example.demo.filtro;
 
 import java.util.Date;
 
-import com.example.demo.model.Ded;
+import com.example.demo.model.Projeto;
 import com.example.demo.model.Sprint;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -13,7 +13,7 @@ public class FiltroSprintDto  {
 	private Date dataInicio;
 	private Date dataFim;
 	private int diasUteis;
-	private Ded dedId;
+	private Projeto dedId;
 	public long getId() {
 		return id;
 	}
@@ -44,10 +44,10 @@ public class FiltroSprintDto  {
 	public void setDiasUteis(int diasUteis) {
 		this.diasUteis = diasUteis;
 	}
-	public Ded getDedId() {
+	public Projeto getDedId() {
 		return dedId;
 	}
-	public void setDedId(Ded dedId) {
+	public void setDedId(Projeto dedId) {
 		this.dedId = dedId;
 	}
 

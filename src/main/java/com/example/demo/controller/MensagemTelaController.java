@@ -33,7 +33,7 @@ public class MensagemTelaController {
 	
 	
 	@PostMapping("/mensagemTelas")
-	public MensagemTela novoMensagemTela( @RequestBody MensagemTela mensagemTela){
+	public MensagemTela novoMensagemTela( @RequestBody MensagemTela mensagemTela) throws Exception{
 		MensagemTela s = mensagemTelaService.save(mensagemTela);
 	        return s;
 	    }

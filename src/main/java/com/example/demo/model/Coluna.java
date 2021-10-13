@@ -9,11 +9,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 
 @Entity
-@Table
+@Table(name = "coluna")
 public class Coluna extends Base {
 
 	/**
@@ -23,16 +21,30 @@ public class Coluna extends Base {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Long id;
 	
 	@Column(name = "nome", nullable = false)
 	private String nome;
-
-	@JsonIgnoreProperties("colunas")
+	
 	@ManyToOne
-	@JoinColumn(name="tabela_id", nullable=false)
+	@JoinColumn(name="tabela_id")
 	private Tabela tabela;
 	
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getNome() {
+		return nome;
+	}
 
 	public Tabela getTabela() {
 		return tabela;
@@ -41,24 +53,4 @@ public class Coluna extends Base {
 	public void setTabela(Tabela tabela) {
 		this.tabela = tabela;
 	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-
-
-	
 }

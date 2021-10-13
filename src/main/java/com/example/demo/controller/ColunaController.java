@@ -32,7 +32,7 @@ public class ColunaController {
 	    }
 	
 	@PostMapping("/colunas")
-	public Coluna novoColuna( @RequestBody Coluna coluna){
+	public Coluna novoColuna( @RequestBody Coluna coluna) throws Exception{
 		Coluna s = colunaService.save(coluna);
 	        return s;
 	    }

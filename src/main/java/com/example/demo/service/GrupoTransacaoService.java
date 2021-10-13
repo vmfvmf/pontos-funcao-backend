@@ -1,14 +1,16 @@
 package com.example.demo.service;
 
-import java.util.List;
-import java.util.Optional;
+import org.springframework.stereotype.Service;
 
 import com.example.demo.model.Grupo;
 
+@Service("grupoTransacaoService")
+public class GrupoTransacaoService extends AbstractService<Grupo> {
 
-public interface GrupoTransacaoService {
-	public List<Grupo> findAll(Grupo filtro);
-	public Grupo save(Grupo d);
-	public void deleteById(long id);
-	public Optional<Grupo> findById(long id);
+	@Override
+	public void prepareToSave(Grupo entity) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }

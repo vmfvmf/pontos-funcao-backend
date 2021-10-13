@@ -5,12 +5,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 
 @Entity
 @Table
-public class Ded extends Base{
+public class Projeto extends Base{
 
 	/**
 	 * 
@@ -21,8 +23,8 @@ public class Ded extends Base{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	@Column(name = "numero")
-	private Integer numero;
+	@Column(name = "identificador")
+	private String identificador;
 	
 	@Column(nullable = false, name = "descricao")
 	private String descricao;
@@ -35,12 +37,12 @@ public class Ded extends Base{
 		this.id = id;
 	}
 
-	public Integer getNumero() {
-		return numero;
+	public String getIdentificador() {
+		return identificador;
 	}
 
-	public void setNumero(Integer numero) {
-		this.numero = numero;
+	public void setIdentificador(String numero) {
+		this.identificador = numero;
 	}
 
 	public String getDescricao() {
@@ -50,5 +52,4 @@ public class Ded extends Base{
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-
 }

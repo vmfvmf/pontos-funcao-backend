@@ -1,16 +1,16 @@
 package com.example.demo.service;
 
-import java.util.List;
-import java.util.Optional;
+import org.springframework.stereotype.Service;
 
 import com.example.demo.model.Sprint;
 
+@Service("sprintService")
+public class SprintService extends AbstractService<Sprint>{
+	@Override
+	public void prepareToSave(Sprint entity) {
+		// TODO Auto-generated method stub
+		
+	}
 
-
-public interface SprintService {
-	public List<Sprint> findAll(Sprint filtro);
-	public Sprint save(Sprint s);
-	public void deleteById(long id);
-	public Optional<Sprint> findById(long id);
-	 
+	
 }
