@@ -1,17 +1,18 @@
 package com.vmf.dto;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
+import com.vmf.enums.ContagemEscopoEnum;
 import com.vmf.enums.ContagemEstado;
 
 
 public class ContagemDto extends AbstractBaseDto{
 	private SistemaDto sistema;
 	private String contador;
-	private Date dataContagem;
-	private String escopo;
+	private LocalDate dataContagem;
+	private ContagemEscopoEnum escopo;
 	private Integer totalPontosFuncao;
 	private ProjetoDto projeto;
 	private SprintDto sprint;
@@ -19,6 +20,9 @@ public class ContagemDto extends AbstractBaseDto{
 	private Integer versao;
 	private List<ContagemItemTransacaoDto> transacoes = new ArrayList<>();
 	private List<ContagemItemArquivoReferenciadoDto> arquivosReferenciados = new ArrayList<>();
+	private LocalDate criado; 
+	private LocalDate modificado;
+	private Boolean ultimaVersao;
 	
 	public Integer getTotalPontosFuncao() {
 		return totalPontosFuncao;
@@ -60,19 +64,19 @@ public class ContagemDto extends AbstractBaseDto{
 		this.contador = contador;
 	}
 
-	public Date getDataContagem() {
+	public LocalDate getDataContagem() {
 		return dataContagem;
 	}
 
-	public void setDataContagem(Date dataContagem) {
+	public void setDataContagem(LocalDate dataContagem) {
 		this.dataContagem = dataContagem;
 	}
 
-	public String getEscopo() {
+	public ContagemEscopoEnum getEscopo() {
 		return escopo;
 	}
 
-	public void setEscopo(String escopo) {
+	public void setEscopo(ContagemEscopoEnum escopo) {
 		this.escopo = escopo;
 	}
 
@@ -107,5 +111,28 @@ public class ContagemDto extends AbstractBaseDto{
 	public void setArquivosReferenciados(List<ContagemItemArquivoReferenciadoDto> arquivosReferenciados) {
 		this.arquivosReferenciados = arquivosReferenciados;
 	}
-	
+
+	public LocalDate getCriado() {
+		return criado;
+	}
+
+	public void setCriado(LocalDate criado) {
+		this.criado = criado;
+	}
+
+	public LocalDate getModificado() {
+		return modificado;
+	}
+
+	public void setModificado(LocalDate modificado) {
+		this.modificado = modificado;
+	}
+
+	public Boolean getUltimaVersao() {
+		return ultimaVersao;
+	}
+
+	public void setUltimaVersao(Boolean ultimaVersao) {
+		this.ultimaVersao = ultimaVersao;
+	}	
 }

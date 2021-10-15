@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vmf.dto.SistemaDto;
+import com.vmf.entities.Sistema;
 import com.vmf.mappers.AbstractMapperBase;
 import com.vmf.mappers.SistemaMapper;
-import com.vmf.model.Sistema;
 import com.vmf.service.AbstractService;
 import com.vmf.service.SistemaService;
 

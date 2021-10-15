@@ -1,4 +1,4 @@
-package com.vmf.model;
+package com.vmf.entities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,11 +25,29 @@ public class ContagemItemArquivoReferenciado extends AbstractContagemItem {
 	@JoinColumn(name = "contagem_item_id")
 	private List<Tabela> tabelas = new ArrayList<>();
 
+	public ContagemItemArquivoReferenciado() {
+		super();
+		tabelas = new ArrayList<>();
+	}
+	
 	public List<Tabela> getTabelas() {
 		return tabelas;
 	}
 
 	public void setTabelas(List<Tabela> tabelas) {
 		this.tabelas = tabelas;
+	}
+
+	@Override
+	public ContagemItemArquivoReferenciado clone() {
+		ContagemItemArquivoReferenciado novo = new ContagemItemArquivoReferenciado();
+		ContagemItemArquivoReferenciado.clone(novo, this);
+				
+		getTabelas().forEach(tabela -> {
+			Tabela novaTabela = tabela.clone();
+			novo.getTabelas().add(novaTabela);
+		});
+		
+		return novo;
 	}
 }

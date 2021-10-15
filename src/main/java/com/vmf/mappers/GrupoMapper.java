@@ -1,9 +1,12 @@
 package com.vmf.mappers;
 import java.util.List;
 
-import com.vmf.dto.GrupoDto;
-import com.vmf.model.Grupo;
+import org.springframework.stereotype.Service;
 
+import com.vmf.dto.GrupoDto;
+import com.vmf.entities.Grupo;
+
+@Service("GrupoMapper")
 public class GrupoMapper extends AbstractMapperBase<GrupoDto, Grupo> {	
 	public Grupo convertToEntity(GrupoDto dto) {
 		return super.convertToTarget(dto, Grupo.class);
@@ -14,10 +17,10 @@ public class GrupoMapper extends AbstractMapperBase<GrupoDto, Grupo> {
 	}
 	
 	public List<Grupo> convertToEntityList(List<GrupoDto> dtos) {
-		return super.mapList(dtos, Grupo.class);
+		return super.convertToEntityList(dtos);
 	}
 	
 	public List<GrupoDto> convertToDtoList(List<Grupo> entitys) {
-		return super.mapList(entitys, GrupoDto.class);
+		return super.convertToDtoList(entitys);
 	}
 }

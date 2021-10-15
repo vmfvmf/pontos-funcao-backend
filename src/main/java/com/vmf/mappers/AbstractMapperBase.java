@@ -4,28 +4,42 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.modelmapper.config.Configuration.AccessLevel;
 
 public abstract class AbstractMapperBase<D, E> {
-	@Autowired
-    protected ModelMapper modelMapper;
+	private ModelMapper modelMapper;
 	
-	protected <S, T> T convertToTarget(S src, Class<T> targetClass) {
+	public AbstractMapperBase() {
+		modelMapper = new ModelMapper();
+		modelMapper.getConfiguration()
+	  .setFieldMatchingEnabled(true)
+	  .setFieldAccessLevel(AccessLevel.PRIVATE)
+	  .setSkipNullEnabled(true);
+	}
+	
+	public ModelMapper getModelMapper() {
+	    return modelMapper;
+	}
+	
+	public <S, T> T convertToTarget(S src, Class<T> targetClass) {
         return modelMapper.map(src, targetClass);
     }
 	
 	public abstract E convertToEntity(D dto);
 	
 	public abstract D convertToDto(E entity);
+		
+	public List<E> convertToEntityList(List<D> dtoList) {
+		return dtoList
+			      .stream()
+			      .map(this::convertToEntity)
+			      .collect(Collectors.toList());
+	}
 	
-	public abstract List<E> convertToEntityList(List<D> dto);
-	
-	public abstract List<D> convertToDtoList(List<E> entity);
-	    
-	protected <S, T> List<T> mapList(List<S> source, Class<T> targetClass) {
-	    return source
-	      .stream()
-	      .map(element -> modelMapper.map(element, targetClass))
-	      .collect(Collectors.toList());
+	public List<D> convertToDtoList(List<E> entityList) {
+		return entityList
+			      .stream()
+			      .map(this::convertToDto)
+			      .collect(Collectors.toList());
 	}
 }

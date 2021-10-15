@@ -1,4 +1,4 @@
-package com.vmf.model;
+package com.vmf.entities;
 
 import java.util.Date;
 
@@ -11,11 +11,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 @Entity
 @Table
-public class Sprint extends Base {
+public class Sprint extends AbstractBase {
 
 	/**
 	 * 

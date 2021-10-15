@@ -1,13 +1,13 @@
 package com.vmf.enums;
 
-public enum EscopoContagemEnum {
+public enum ContagemEscopoEnum {
 	SISTEMA("SISTEMA"),
 	PROJETO("PROJETO"),
 	SPRINT("SPRINT");
 	
 	private String descricao;
 	
-	EscopoContagemEnum(String descricao) {
+	ContagemEscopoEnum(String descricao) {
 		this.descricao = descricao;
 	}
 	

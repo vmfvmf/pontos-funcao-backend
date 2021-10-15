@@ -2,7 +2,7 @@ package com.vmf.service;
 
 import org.springframework.stereotype.Service;
 
-import com.vmf.model.Sistema;
+import com.vmf.entities.Sistema;
 
 @Service("sistemaService")
 public class SistemaService extends AbstractService<Sistema>{

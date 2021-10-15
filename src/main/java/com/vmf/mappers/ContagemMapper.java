@@ -1,31 +1,53 @@
 package com.vmf.mappers;
-import java.util.List;
-import java.util.stream.Collectors;
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.vmf.dto.ContagemDto;
-import com.vmf.model.Contagem;
+import com.vmf.entities.Contagem;
+import com.vmf.enums.ContagemEscopoEnum;
+import com.vmf.service.ContagemService;
 
-public class ContagemMapper extends AbstractMapperBase<ContagemDto, Contagem> {	
+@Service("contagemMapper")
+public class ContagemMapper extends AbstractMapperBase<ContagemDto, Contagem> {
+	@Autowired
+	private ContagemService service;
+	
+	@Autowired
+	private ContagemItemArquivoReferenciadoConverter contagemItemArquivoReferenciadoConverter;
+	
+	@Autowired
+	private ContagemItemTransacaoConverter contagemItemTransacaoConverter;
+	
+	@PostConstruct
+	private void init() {
+		getModelMapper().addConverter(contagemItemArquivoReferenciadoConverter.convertToDto());
+		getModelMapper().addConverter(contagemItemTransacaoConverter.convertToDto());
+		
+		getModelMapper().addConverter(contagemItemArquivoReferenciadoConverter.convertToEntity());
+		getModelMapper().addConverter(contagemItemTransacaoConverter.convertToEntity());
+	}
+	
+	public ContagemMapper () {
+		super();		
+	}
+	
 	public Contagem convertToEntity(ContagemDto dto) {
-		return super.convertToTarget(dto, Contagem.class);
+		Contagem convertida = super.convertToTarget(dto, Contagem.class);
+		if (dto.getId() != null) {
+			Contagem original = service.findById(dto.getId()).get();
+			convertida.setContagemOrigem(original.getContagemOrigem());
+		}
+		return convertida;
 	}
 	
 	public ContagemDto convertToDto(Contagem entity) {
 		ContagemDto dto = super.convertToTarget(entity, ContagemDto.class);
-		prepareToSend(dto);
+		if (dto.getEscopo() == ContagemEscopoEnum.SPRINT) {
+			dto.setProjeto(dto.getSprint().getProjeto());
+		}
 		return dto;
 	}
-	
-	public List<Contagem> convertToEntityList(List<ContagemDto> dtos) {
-		return super.mapList(dtos, Contagem.class);
-	}
-	
-	public List<ContagemDto> convertToDtoList(List<Contagem> entities) {
-		List<ContagemDto> lista = super.mapList(entities, ContagemDto.class);
-		return lista.stream().map(this::prepareToSend).collect(Collectors.toList());
-	}
-	
-	private ContagemDto prepareToSend(ContagemDto dto) {
-		return dto;
-	}
+		
 }

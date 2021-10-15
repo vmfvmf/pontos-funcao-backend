@@ -2,7 +2,7 @@ package com.vmf.service;
 
 import org.springframework.stereotype.Service;
 
-import com.vmf.model.Projeto;
+import com.vmf.entities.Projeto;
 
 @Service("projetoService")
 public class ProjetoService extends AbstractService<Projeto> {

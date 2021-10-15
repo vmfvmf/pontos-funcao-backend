@@ -1,18 +1,16 @@
-package com.vmf.model;
+package com.vmf.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 
 @Entity
 @Table
-public class Projeto extends Base{
+public class Projeto extends AbstractBase{
 
 	/**
 	 * 

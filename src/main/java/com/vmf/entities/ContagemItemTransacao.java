@@ -1,4 +1,4 @@
-package com.vmf.model;
+package com.vmf.entities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,4 +68,20 @@ public class ContagemItemTransacao extends AbstractContagemItem {
 		this.mensagem = mensagem;
 	}
 	
+	@Override
+	public ContagemItemTransacao clone() {
+		ContagemItemTransacao nova = new ContagemItemTransacao();
+		ContagemItemArquivoReferenciado.clone(nova, this);
+		
+		nova.setGrupo(getGrupo());
+		nova.setAcao(isAcao());
+		nova.setMensagem(isMensagem());
+				
+		for(TransacaoTD td : getTransacaoTDs()) {
+			TransacaoTD novoTd = td.clone();
+			nova.getTransacaoTDs().add(novoTd);
+		};		
+		
+		return nova;
+	}
 }

@@ -1,4 +1,4 @@
-package com.vmf.model;
+package com.vmf.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,30 +9,24 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-
 @Entity
-@Table(name = "coluna")
-public class Coluna extends Base {
-
+@Table
+public class Grupo extends AbstractBase{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 8933834758570620231L;
+	private static final long serialVersionUID = 8209734799987984125L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name = "nome", nullable = false)
+	@Column(name = "nome")
 	private String nome;
-	
+			
 	@ManyToOne
-	@JoinColumn(name="tabela_id")
-	private Tabela tabela;
-	
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
+	@JoinColumn(name="contagem_id", nullable=false)
+	private Contagem contagem;
 
 	public Long getId() {
 		return id;
@@ -46,11 +40,15 @@ public class Coluna extends Base {
 		return nome;
 	}
 
-	public Tabela getTabela() {
-		return tabela;
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
-	public void setTabela(Tabela tabela) {
-		this.tabela = tabela;
+	public Contagem getContagem() {
+		return contagem;
+	}
+
+	public void setContagem(Contagem contagem) {
+		this.contagem = contagem;
 	}
 }

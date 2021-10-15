@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vmf.dto.ProjetoDto;
+import com.vmf.entities.Projeto;
 import com.vmf.mappers.AbstractMapperBase;
 import com.vmf.mappers.ProjetoMapper;
-import com.vmf.model.Projeto;
 import com.vmf.service.AbstractService;
 import com.vmf.service.ProjetoService;
 

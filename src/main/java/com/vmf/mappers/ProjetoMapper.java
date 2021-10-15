@@ -1,9 +1,12 @@
 package com.vmf.mappers;
 import java.util.List;
 
-import com.vmf.dto.ProjetoDto;
-import com.vmf.model.Projeto;
+import org.springframework.stereotype.Service;
 
+import com.vmf.dto.ProjetoDto;
+import com.vmf.entities.Projeto;
+
+@Service("projetoMapper")
 public class ProjetoMapper extends AbstractMapperBase<ProjetoDto, Projeto> {	
 	public Projeto convertToEntity(ProjetoDto dto) {
 		return super.convertToTarget(dto, Projeto.class);
@@ -14,10 +17,10 @@ public class ProjetoMapper extends AbstractMapperBase<ProjetoDto, Projeto> {
 	}
 	
 	public List<Projeto> convertToEntityList(List<ProjetoDto> dtos) {
-		return super.mapList(dtos, Projeto.class);
+		return super.convertToEntityList(dtos);
 	}
 	
 	public List<ProjetoDto> convertToDtoList(List<Projeto> entitys) {
-		return super.mapList(entitys, ProjetoDto.class);
+		return super.convertToDtoList(entitys);
 	}
 }

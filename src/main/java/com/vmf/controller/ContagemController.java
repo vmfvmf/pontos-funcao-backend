@@ -1,6 +1,9 @@
 package com.vmf.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,12 +14,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vmf.dto.ContagemDto;
+import com.vmf.entities.Contagem;
 import com.vmf.mappers.AbstractMapperBase;
 import com.vmf.mappers.ContagemMapper;
-import com.vmf.model.Contagem;
 import com.vmf.service.AbstractService;
 import com.vmf.service.ContagemService;
 
+@Transactional
 @RestController
 public class ContagemController extends AbstractController<ContagemDto, Contagem>{
 
@@ -31,6 +35,16 @@ public class ContagemController extends AbstractController<ContagemDto, Contagem
 		return super.findAll(filtro);
 	}
 	
+	@GetMapping("/contagens/{id}/versoes")
+	public List<ContagemDto> findAllVersoes(@PathVariable Long id, ContagemDto filtro) {
+		Integer versao = filtro.getVersao();
+		filtro.setId(null);
+		filtro.setVersao(null);
+		return super.findAll(filtro).stream()
+				.filter(contagem -> contagem.getId() != id && contagem.getVersao() < versao)
+				.collect(Collectors.toList());
+	}
+	
 	@GetMapping("/contagens/{id}")
 	public ContagemDto getContagemById(@PathVariable Integer id) throws Exception {
 		return super.getEntityById(id);
@@ -41,11 +55,19 @@ public class ContagemController extends AbstractController<ContagemDto, Contagem
 		return super.newEntity(dto);
 	}
 	
-	@PostMapping("/contagens/{id}/versionar")
+	@GetMapping("/contagens/{id}/versionar")
 	public ContagemDto versionar(@PathVariable Long id) throws Exception {
-		((ContagemService)getService()).setVersionar();
+		contagemService.setVersionar();
 		return super.editEntity(id);
 	}
+	
+	@Transactional
+	@GetMapping("/contagens/{id}/criar_novo_esboco_incremento_versao")
+	public ContagemDto criarNovoEsbocoIncrementoVersao(@PathVariable Long id) throws Exception {
+		contagemService.setCriarNovoEsbocoIncrementoVersao();
+		return super.editEntity(id);
+	}
+	
 	
 	@DeleteMapping("/contagens/{id}")
 	public void delete(@PathVariable Long id) {

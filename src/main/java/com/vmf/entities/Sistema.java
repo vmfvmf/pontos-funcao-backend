@@ -1,4 +1,4 @@
-package com.vmf.model;
+package com.vmf.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,7 +12,7 @@ import javax.persistence.Table;
 @Table
 @NamedQuery(name = "Sistema.findByContagemId",
 			query = "select s from Sistema s join Contagem c on c.sistema= s where c.sistema.id = ?1")
-public class Sistema extends Base {
+public class Sistema extends AbstractBase {
 	/**
 	 * 
 	 */

@@ -1,4 +1,6 @@
-package com.vmf.model;
+package com.vmf.entities;
+
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -12,19 +14,21 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DiscriminatorOptions;
 
 import com.vmf.enums.ComplexidadeItemEnum;
 import com.vmf.enums.ContagemItemFuncaoEnum;
+import com.vmf.interfaces.IHaveCriadoModificadoId;
 
 @Entity
 @Table(name = "contagem_item")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "tipo")
 @DiscriminatorOptions(force = true)
-public abstract class AbstractContagemItem extends Base {
+public abstract class AbstractContagemItem extends AbstractBase implements IHaveCriadoModificadoId {
 	/**
 	 * 
 	 */
@@ -57,6 +61,16 @@ public abstract class AbstractContagemItem extends Base {
 	@Column(name="funcao")
 	@Enumerated(EnumType.STRING)
 	private ContagemItemFuncaoEnum funcao;
+	
+	@OneToOne
+	@JoinColumn(name="contagem_item_origem_id")
+	private AbstractContagemItem contagemItemOrigem;
+	
+	@Column
+	private LocalDate criado;
+	
+	@Column
+	private LocalDate modificado;
 				
 	public Long getId() {
 		return id;
@@ -120,5 +134,45 @@ public abstract class AbstractContagemItem extends Base {
 
 	public void setFuncao(ContagemItemFuncaoEnum funcao) {
 		this.funcao = funcao;
+	}
+
+	public AbstractContagemItem getContagemItemOrigem() {
+		return contagemItemOrigem;
+	}
+
+	public void setContagemItemOrigem(AbstractContagemItem contagemItemOrigem) {
+		this.contagemItemOrigem = contagemItemOrigem;
+	}
+
+	public LocalDate getCriado() {
+		return criado;
+	}
+
+	public void setCriado(LocalDate criado) {
+		this.criado = criado;
+	}
+
+	public LocalDate getModificado() {
+		return modificado;
+	}
+
+	public void setModificado(LocalDate modificado) {
+		this.modificado = modificado;
 	}	
+	
+	public static void clone(AbstractContagemItem nova, AbstractContagemItem origem) {
+		nova.setComplexidade(origem.getComplexidade());
+		nova.setCriado(LocalDate.now());
+		nova.setFuncao(origem.getFuncao());
+		nova.setNome(origem.getNome());
+		nova.setPf(origem.getPf());
+		nova.setTd(origem.getTd());
+		nova.setTr(origem.getTr());
+		nova.setContagemItemOrigem(calculateContagemOrigem(origem));
+	}
+	
+	protected static AbstractContagemItem calculateContagemOrigem(AbstractContagemItem origem) {
+		return  origem.getContagemItemOrigem() != null && origem.equals(origem.getContagemItemOrigem())
+				?  origem.getContagemItemOrigem() : origem;
+	}
 }

@@ -11,7 +11,7 @@ import com.vmf.service.AbstractService;
 
 public abstract class AbstractController<D, E> {
 	protected abstract AbstractMapperBase<D, E> getMapper();
-	
+		
 	protected abstract AbstractService<E> getService();
 	
 	protected List<D> findAll(D filtro) {

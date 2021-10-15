@@ -1,51 +1,106 @@
 package com.vmf.service;
 
+import java.time.LocalDate;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.vmf.entities.Contagem;
+import com.vmf.entities.ContagemItemArquivoReferenciado;
+import com.vmf.entities.ContagemItemTransacao;
 import com.vmf.enums.ContagemEstado;
-import com.vmf.model.Contagem;
 
 @Service("contagemService")
 public class ContagemService extends AbstractService<Contagem> {
-
+	@Autowired
+	private ContagemItemArquivoReferenciadoService arqService;
+	
+	@Autowired
+	private ContagemItemTransacaoService contagemItemTransacaoService;
 	
 	@Override
-	public void prepareToSave(Contagem entity) {
-		Integer somador = entity.getArquivosReferenciados().stream().reduce(0, (subTotal, element) -> subTotal + element.getPf(),
+	public void prepareToSave(Contagem entity) {		
+		entity.setTotalPontosFuncao(calcularTotalPontosFuncao(entity));
+		
+		for (ContagemItemArquivoReferenciado arquivoReferenciado : entity.getArquivosReferenciados()) {
+			arquivoReferenciado.setContagem(entity);
+			arqService.ajustaEntidadeModificada(arquivoReferenciado);
+		}
+		
+		for (ContagemItemTransacao transacao : entity.getTransacoes()) {
+			transacao.setContagem(entity);
+			contagemItemTransacaoService.ajustaEntidadeModificada(transacao);
+		}
+		
+		if (entity.getId() != null) {
+			Contagem original = findById(entity.getId()).get();
+			
+			if(!entity.equals(original)) {
+				entity.setModificado(LocalDate.now());
+			}
+		}
+		
+		preparaCriacaoEdicaoEntidade(entity);
+	}
+		
+	private Integer calcularTotalPontosFuncao(Contagem entity) {
+		return entity.getArquivosReferenciados().stream().reduce(0, (subTotal, element) -> subTotal + element.getPf(),
 				Integer::sum)
 				+ entity.getTransacoes().stream().reduce(0, (subTotal, element) -> subTotal + element.getPf(), Integer::sum);
-		entity.setTotalPontosFuncao(somador);
-		entity.getArquivosReferenciados().forEach(arq -> {
-			arq.setContagem(entity);
-			arq.getTabelas().forEach(t -> {
-				t.setArquivoReferenciado(arq);
-				t.getColunas().forEach(c -> c.setTabela(t));
-			});
-		});
-		entity.getTransacoes().forEach(t -> {
-			t.setContagem(entity);
-			t.getGrupo().setContagem(entity);
-			t.getTransacaoTDs().forEach(td -> td.setItemTransacao(t));
-			if (t.isAcao() == null) {
-				t.setAcao(false);
+	}
+
+	private void preparaCriacaoEdicaoEntidade(Contagem entity) {
+		if (entity.getId() == null) {
+			entity.setEstado(ContagemEstado.E);
+			entity.setUltimaVersao(true);
+			entity.setCriado(LocalDate.now());
+			if (entity.getVersao() == null) {
+				entity.setVersao(1);
 			}
-			if (t.isMensagem() == null) {
-				t.setMensagem(false);
-			}
-		});
+		}
 	}
 	
 	public void setVersionar() {
 		super.setValidator((entidade) -> {
-			if (!entidade.getEstado().equals(ContagemEstado.E) ||
-					entidade.getVersao() != null) {
+			super.setValidator(null);
+			if (!entidade.getEstado().equals(ContagemEstado.E)) {
 				throw new Exception("Esta contagem já está versionada"); 
 			}
 		});
-		super.setCustomCallback((entidade) -> {
+		super.setBeforeSaveCallback((entidade) -> {
+			super.setBeforeSaveCallback(null);
 			entidade.setEstado(ContagemEstado.V);
-			entidade.setVersao(1);
+			entidade.setModificado(LocalDate.now());
+			return null;
 		});
 	}
 
+	public void setCriarNovoEsbocoIncrementoVersao() throws Exception {
+		super.setValidator((entidade) -> {
+			super.setValidator(null);
+			if (entidade.getEstado() != ContagemEstado.V) {
+				throw new Exception("Esta contagem não está versionada para criar um novo esboço."); 
+			}
+			if (!entidade.getUltimaVersao()) {
+				throw new Exception("Esta contagem não é a última versão, só é possível criar esboços a partir da última versão."); 
+			}
+		});
+		super.setBeforeSaveCallback((entidade) -> {
+			super.setBeforeSaveCallback(null);
+			trataEsbocoIncrementoVersao(entidade);
+			return null;
+		});
+	}
+	
+	private void trataEsbocoIncrementoVersao(Contagem origem) throws Exception {
+		origem.setUltimaVersao(false);
+		origem.setModificado(LocalDate.now());
+		
+		super.setAfterSaveCallback((entidade) -> {
+			super.setAfterSaveCallback(null);
+			Contagem nova = origem.criarEsbocoVersionado();
+			entidade = this.save(nova);
+			return entidade;
+		});
+	}
 }

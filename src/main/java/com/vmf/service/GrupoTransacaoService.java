@@ -2,7 +2,7 @@ package com.vmf.service;
 
 import org.springframework.stereotype.Service;
 
-import com.vmf.model.Grupo;
+import com.vmf.entities.Grupo;
 
 @Service("grupoTransacaoService")
 public class GrupoTransacaoService extends AbstractService<Grupo> {

@@ -1,51 +1,65 @@
 package com.vmf.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vmf.model.Tabela;
+import com.vmf.dto.TabelaDto;
+import com.vmf.entities.Tabela;
+import com.vmf.mappers.AbstractMapperBase;
+import com.vmf.mappers.TabelaMapperConverter;
+import com.vmf.service.AbstractService;
 import com.vmf.service.TabelaService;
 
 @RestController
-public class TabelaController {
-	
+public class TabelaController extends AbstractController<TabelaDto, Tabela>{
+
 	@Autowired
 	private TabelaService tabelaService;
 	
+	@Autowired
+	TabelaMapperConverter mapper;
+	
 	@GetMapping("/tabelas")
-	public List<Tabela> findAllTabelas(Tabela filtro){
-		List<Tabela> f = tabelaService.findAll(filtro);
-		return f;
+	public List<TabelaDto> findAllTabelas(TabelaDto filtro) {
+		return super.findAll(filtro);
 	}
+
 	@GetMapping("/tabelas/{id}")
-	public Optional<Tabela> getTabelaById(@PathVariable Integer id){
-	        Optional<Tabela> d = tabelaService.findById(id);
-	        return d;
-	    }
-	
+	public TabelaDto getTabelaById(@PathVariable long id) throws Exception {
+		return super.getEntityById(id);
+	}
+
 	@PostMapping("/tabelas")
-	public Tabela novoTabela( @RequestBody Tabela tabela) throws Exception{
-		Tabela s = tabelaService.save(tabela);
-	        return s;
-	    }
+	public TabelaDto novoTabela(@RequestBody TabelaDto dto) throws Exception {
+		return super.newEntity(dto);
+	}
 	
-	@PostMapping("/tabelas/emlote")
-	public List<Tabela> salvaEmLote( @RequestBody List<Tabela> tabelas){
-		return tabelaService.salvaEmLote(tabelas);
-	    }
+	@PutMapping("/tabelas")
+	public TabelaDto editarSistema(@RequestBody TabelaDto dto) throws Exception {
+		return super.editEntity(dto);
+	}
 	
-	
-	 @DeleteMapping("/tabelas/{id}")
-	public void deleteTabela(@PathVariable Integer id){
-		 	tabelaService.deleteById(id);
-	    }
+	@DeleteMapping("/tabelas/{id}")
+	public void deleteTabela(@PathVariable long id) {
+		super.deleteEntity(id);
+	}
+
+	@Override
+	protected AbstractMapperBase<TabelaDto, Tabela> getMapper() {
+		return mapper;
+	}
+
+	@Override
+	protected AbstractService<Tabela> getService() {
+		return tabelaService;
+	}
 
 }

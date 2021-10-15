@@ -1,5 +1,6 @@
-package com.vmf.model;
+package com.vmf.entities;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,12 +13,15 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.vmf.interfaces.IHaveCriadoModificadoId;
 
 
 @Entity
 @Table
-public class Tabela extends Base {
+public class Tabela extends AbstractBase implements IHaveCriadoModificadoId {
 
 	/**
 	 * 
@@ -37,6 +41,16 @@ public class Tabela extends Base {
 	@ManyToOne
 	@JoinColumn(name="contagem_item_id")
 	private ContagemItemArquivoReferenciado arquivoReferenciado;
+	
+	@OneToOne
+	@JoinColumn(name="tabela_origem_id")
+	private Tabela tabelaOrigem;
+	
+	@Column
+	private LocalDate criado;
+	
+	@Column
+	private LocalDate modificado;
 
 	public Long getId() {
 		return id;
@@ -70,5 +84,47 @@ public class Tabela extends Base {
 		this.arquivoReferenciado = arquivoReferenciado;
 	}
 
+	public Tabela getTabelaOrigem() {
+		return tabelaOrigem;
+	}
+
+	public void setTabelaOrigem(Tabela tabelaOrigem) {
+		this.tabelaOrigem = tabelaOrigem;
+	}
+
+	public LocalDate getCriado() {
+		return criado;
+	}
+
+	public void setCriado(LocalDate criado) {
+		this.criado = criado;
+	}
+
+	public LocalDate getModificado() {
+		return modificado;
+	}
+
+	public void setModificado(LocalDate modificado) {
+		this.modificado = modificado;
+	}
+
+	@Override
+	public Tabela clone() {
+		Tabela nova = new Tabela();
+		nova.setCriado(LocalDate.now());
+		nova.setNome(getNome());
+		nova.setTabelaOrigem(calculateTabelaOrigem());		
+		
+		for(Coluna coluna : getColunas()) {
+			Coluna novaColuna = coluna.clone();
+			nova.getColunas().add(novaColuna);
+		}
+		
+		return nova;
+	}
 	
+	private Tabela calculateTabelaOrigem() {
+		return  this.getTabelaOrigem() != null && this.equals(this.getTabelaOrigem())
+				?  this.getTabelaOrigem() : this;
+	}
 }

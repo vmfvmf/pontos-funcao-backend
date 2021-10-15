@@ -1,9 +1,9 @@
-package com.vmf.model;
+package com.vmf.entities;
 
 import java.io.Serializable;
 
 
-public abstract class Base implements Serializable{
+public abstract class AbstractBase implements Serializable{
 
 	/**
 	 * 

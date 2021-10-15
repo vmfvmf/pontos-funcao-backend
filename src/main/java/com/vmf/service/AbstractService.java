@@ -1,5 +1,6 @@
 package com.vmf.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,6 +10,7 @@ import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.vmf.interfaces.ICustomCallback;
+import com.vmf.interfaces.IHaveCriadoModificadoId;
 import com.vmf.interfaces.IValidator;
 
 public abstract class AbstractService<T> {
@@ -16,14 +18,19 @@ public abstract class AbstractService<T> {
 	protected JpaRepository<T, Long> repository;
 				
 	private IValidator<T> validator;
-	private ICustomCallback<T> customCallback;
+	private ICustomCallback<T> beforeSaveCallback;
+	private ICustomCallback<T> afterSaveCallback;
 	
 	public void setValidator(IValidator<T> validator) {
 		this.validator = validator;
 	}
 	
-	public void setCustomCallback(ICustomCallback<T> customCallback) {
-		this.customCallback = customCallback;
+	public void setBeforeSaveCallback(ICustomCallback<T> customCallback) {
+		this.beforeSaveCallback = customCallback;
+	}
+	
+	public void setAfterSaveCallback(ICustomCallback<T> customCallback) {
+		this.afterSaveCallback = customCallback;
 	}
 	
 	public List<T> findAll() {
@@ -31,24 +38,38 @@ public abstract class AbstractService<T> {
 	}
 
 	public T save(T entity) throws Exception {
-		validate(entity);
-		prepareToSave(entity);
-		executeCustomCallback(entity);
-		return repository.save(entity);
+		try {
+			validate(entity);
+			prepareToSave(entity);
+			executeBeforeSaveCallback(entity);
+			T t = repository.save(entity);
+			t = executeAfterSaveCallback(t);
+			return t;
+		}catch(Exception e) {
+			validator = null;
+			beforeSaveCallback = null;
+			afterSaveCallback = null;
+			throw e;
+		}	
 	}
 	
 	private void validate(T entity) throws Exception {
 		if (validator != null) {
 			validator.validate(entity);
-			validator = null;
 		}
 	}
 	
-	private void executeCustomCallback(T entity) {
-		if (customCallback != null) {
-			customCallback.execute(entity);
-			customCallback = null;
+	private void executeBeforeSaveCallback(T entity) throws Exception {
+		if (beforeSaveCallback != null) {
+			beforeSaveCallback.execute(entity);
 		}
+	}
+	
+	private T executeAfterSaveCallback(T entity) throws Exception {
+		if (afterSaveCallback != null) {
+			return afterSaveCallback.execute(entity);
+		}
+		return entity;
 	}
 	
 	public abstract void prepareToSave(T entity);
@@ -65,5 +86,11 @@ public abstract class AbstractService<T> {
 		Example<T> ex = Example.of(filtro, ExampleMatcher.matching());
 		List<T> list = repository.findAll(ex);
 		return list;
+	}
+	
+	protected void setCriadoModificadoId(IHaveCriadoModificadoId entity) {
+		entity.setId(null);
+		entity.setCriado(LocalDate.now());
+		entity.setModificado(null);
 	}
 }

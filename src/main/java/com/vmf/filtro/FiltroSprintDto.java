@@ -3,8 +3,8 @@ package com.vmf.filtro;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.vmf.model.Projeto;
-import com.vmf.model.Sprint;
+import com.vmf.entities.Projeto;
+import com.vmf.entities.Sprint;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FiltroSprintDto  {

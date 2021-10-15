@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vmf.dto.GrupoDto;
+import com.vmf.entities.Grupo;
 import com.vmf.mappers.AbstractMapperBase;
 import com.vmf.mappers.GrupoMapper;
-import com.vmf.model.Grupo;
 import com.vmf.service.AbstractService;
 import com.vmf.service.GrupoTransacaoService;
 

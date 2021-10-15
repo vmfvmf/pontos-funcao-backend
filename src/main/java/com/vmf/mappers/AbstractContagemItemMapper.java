@@ -2,8 +2,8 @@ package com.vmf.mappers;
 import java.util.List;
 
 import com.vmf.dto.AbstractContagemItemDto;
-import com.vmf.model.AbstractContagemItem;
-import com.vmf.model.ContagemItemTransacao;
+import com.vmf.entities.AbstractContagemItem;
+import com.vmf.entities.ContagemItemTransacao;
 
 public class AbstractContagemItemMapper extends AbstractMapperBase<AbstractContagemItemDto, AbstractContagemItem> {		
 	public ContagemItemTransacao convertToEntity(AbstractContagemItemDto dto) {
@@ -15,10 +15,10 @@ public class AbstractContagemItemMapper extends AbstractMapperBase<AbstractConta
 	}
 	
 	public List<AbstractContagemItem> convertToEntityList(List<AbstractContagemItemDto> dtos) {
-		return super.mapList(dtos, AbstractContagemItem.class);
+		return super.convertToEntityList(dtos);
 	}
 	
 	public List<AbstractContagemItemDto> convertToDtoList(List<AbstractContagemItem> entitys) {
-		return super.mapList(entitys, AbstractContagemItemDto.class);
+		return super.convertToDtoList(entitys);
 	}
 }
