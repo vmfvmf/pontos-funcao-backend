@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vmf.dto.SprintDto;
 import com.vmf.entities.Sprint;
-import com.vmf.mappers.AbstractMapperBase;
-import com.vmf.mappers.SprintMapper;
 import com.vmf.service.AbstractService;
 import com.vmf.service.SprintService;
 
@@ -24,9 +22,6 @@ public class SprintController extends AbstractController<SprintDto, Sprint>{
 	@Autowired
 	private SprintService sprintService;
 	
-	@Autowired
-	private SprintMapper sprintMapper;
-
 	@GetMapping("/sprints")
 	public List<SprintDto> findAllSprints(SprintDto filtro) {
 		return super.findAll(filtro);
@@ -53,12 +48,7 @@ public class SprintController extends AbstractController<SprintDto, Sprint>{
 	}
 
 	@Override
-	protected AbstractMapperBase<SprintDto, Sprint> getMapper() {
-		return sprintMapper;
-	}
-
-	@Override
-	protected AbstractService<Sprint> getService() {
+	protected AbstractService<SprintDto, Sprint> getService() {
 		return sprintService;
 	}
 

@@ -50,4 +50,8 @@ public class ContagemItemArquivoReferenciado extends AbstractContagemItem {
 		
 		return novo;
 	}
+
+	public List<Tabela> getObjetos() {
+		return getTabelas();
+	}
 }

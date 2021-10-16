@@ -22,13 +22,14 @@ import org.hibernate.annotations.DiscriminatorOptions;
 import com.vmf.enums.ComplexidadeItemEnum;
 import com.vmf.enums.ContagemItemFuncaoEnum;
 import com.vmf.interfaces.IHaveCriadoModificadoId;
+import com.vmf.interfaces.IHaveEntidadeOrigem;
 
 @Entity
 @Table(name = "contagem_item")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "tipo")
 @DiscriminatorOptions(force = true)
-public abstract class AbstractContagemItem extends AbstractBase implements IHaveCriadoModificadoId {
+public abstract class AbstractContagemItem extends AbstractBase implements IHaveCriadoModificadoId, IHaveEntidadeOrigem<AbstractContagemItem> {
 	/**
 	 * 
 	 */
@@ -136,7 +137,7 @@ public abstract class AbstractContagemItem extends AbstractBase implements IHave
 		this.funcao = funcao;
 	}
 
-	public AbstractContagemItem getContagemItemOrigem() {
+	public AbstractContagemItem getEntidadeOrigem() {
 		return contagemItemOrigem;
 	}
 
@@ -172,7 +173,7 @@ public abstract class AbstractContagemItem extends AbstractBase implements IHave
 	}
 	
 	protected static AbstractContagemItem calculateContagemOrigem(AbstractContagemItem origem) {
-		return  origem.getContagemItemOrigem() != null && origem.equals(origem.getContagemItemOrigem())
-				?  origem.getContagemItemOrigem() : origem;
+		return  origem.getEntidadeOrigem() != null && origem.equals(origem.getEntidadeOrigem())
+				?  origem.getEntidadeOrigem() : origem;
 	}
 }

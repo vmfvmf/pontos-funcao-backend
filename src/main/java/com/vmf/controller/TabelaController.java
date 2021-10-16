@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vmf.dto.TabelaDto;
 import com.vmf.entities.Tabela;
-import com.vmf.mappers.AbstractMapperBase;
-import com.vmf.mappers.TabelaMapperConverter;
 import com.vmf.service.AbstractService;
 import com.vmf.service.TabelaService;
 
@@ -23,10 +21,7 @@ public class TabelaController extends AbstractController<TabelaDto, Tabela>{
 
 	@Autowired
 	private TabelaService tabelaService;
-	
-	@Autowired
-	TabelaMapperConverter mapper;
-	
+		
 	@GetMapping("/tabelas")
 	public List<TabelaDto> findAllTabelas(TabelaDto filtro) {
 		return super.findAll(filtro);
@@ -53,12 +48,7 @@ public class TabelaController extends AbstractController<TabelaDto, Tabela>{
 	}
 
 	@Override
-	protected AbstractMapperBase<TabelaDto, Tabela> getMapper() {
-		return mapper;
-	}
-
-	@Override
-	protected AbstractService<Tabela> getService() {
+	protected AbstractService<TabelaDto, Tabela> getService() {
 		return tabelaService;
 	}
 

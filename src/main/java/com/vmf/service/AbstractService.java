@@ -5,86 +5,96 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.vmf.interfaces.ICustomCallback;
 import com.vmf.interfaces.IHaveCriadoModificadoId;
+import com.vmf.interfaces.IHaveEntidadeOrigem;
 import com.vmf.interfaces.IValidator;
+import com.vmf.mappers.AbstractMapperBase;
 
-public abstract class AbstractService<T> {
+public abstract class AbstractService<D, E> {
 	@Autowired
-	protected JpaRepository<T, Long> repository;
-				
-	private IValidator<T> validator;
-	private ICustomCallback<T> beforeSaveCallback;
-	private ICustomCallback<T> afterSaveCallback;
+	protected JpaRepository<E, Long> repository;
+					
+	private IValidator<E> validator;
+	private ICustomCallback<E> beforeSaveCallback;
+	private ICustomCallback<E> afterSaveCallback;
 	
-	public void setValidator(IValidator<T> validator) {
+	public abstract AbstractMapperBase<D, E> getMapper();
+	
+	@Bean
+	public AbstractService<D, E> getAbstractService() {
+		return this;
+	}
+	
+	public void setValidator(IValidator<E> validator) {
 		this.validator = validator;
 	}
 	
-	public void setBeforeSaveCallback(ICustomCallback<T> customCallback) {
+	public void setBeforeSaveCallback(ICustomCallback<E> customCallback) {
 		this.beforeSaveCallback = customCallback;
 	}
 	
-	public void setAfterSaveCallback(ICustomCallback<T> customCallback) {
+	public void setAfterSaveCallback(ICustomCallback<E> customCallback) {
 		this.afterSaveCallback = customCallback;
 	}
 	
-	public List<T> findAll() {
+	public List<E> findAll() {
 		return repository.findAll();
 	}
 
-	public T save(T entity) throws Exception {
+	public E save(E entity) throws Exception {
 		try {
 			validate(entity);
 			prepareToSave(entity);
 			executeBeforeSaveCallback(entity);
-			T t = repository.save(entity);
-			t = executeAfterSaveCallback(t);
-			return t;
-		}catch(Exception e) {
+			E e = repository.save(entity);
+			e = executeAfterSaveCallback(e);
+			return e;
+		}catch(Exception error) {
 			validator = null;
 			beforeSaveCallback = null;
 			afterSaveCallback = null;
-			throw e;
+			throw error;
 		}	
 	}
 	
-	private void validate(T entity) throws Exception {
+	private void validate(E entity) throws Exception {
 		if (validator != null) {
 			validator.validate(entity);
 		}
 	}
 	
-	private void executeBeforeSaveCallback(T entity) throws Exception {
+	private void executeBeforeSaveCallback(E entity) throws Exception {
 		if (beforeSaveCallback != null) {
 			beforeSaveCallback.execute(entity);
 		}
 	}
 	
-	private T executeAfterSaveCallback(T entity) throws Exception {
+	private E executeAfterSaveCallback(E entity) throws Exception {
 		if (afterSaveCallback != null) {
 			return afterSaveCallback.execute(entity);
 		}
 		return entity;
 	}
 	
-	public abstract void prepareToSave(T entity);
+	public abstract void prepareToSave(E entity);
 	
 	public void deleteById(long id) {
 		repository.deleteById(id);
 	}
 
-	public Optional<T> findById(long id) {
+	public Optional<E> findById(long id) {
 		return repository.findById(id);
 	}	
 	
-	public List<T> findAll(T filtro) {
-		Example<T> ex = Example.of(filtro, ExampleMatcher.matching());
-		List<T> list = repository.findAll(ex);
+	public List<E> findAll(E filtro) {
+		Example<E> ex = Example.of(filtro, ExampleMatcher.matching());
+		List<E> list = repository.findAll(ex);
 		return list;
 	}
 	
@@ -92,5 +102,27 @@ public abstract class AbstractService<T> {
 		entity.setId(null);
 		entity.setCriado(LocalDate.now());
 		entity.setModificado(null);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Boolean verificaSeAnteriorEhAnterior(IHaveEntidadeOrigem<E> atualOrigem, E anterior) {
+		if (atualOrigem == null) {
+			return false;
+		}
+		if (atualOrigem.equals(anterior)) {
+			return true;
+		}
+		return verificaSeAnteriorEhAnterior(((IHaveEntidadeOrigem<E>)atualOrigem.getEntidadeOrigem()), anterior);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Boolean verificaSeAnteriorEhAnterior(Long anteriorId, IHaveEntidadeOrigem<E> atualOrigem) {
+		if (atualOrigem == null) {
+			return false;
+		}
+		if (anteriorId.equals(((IHaveCriadoModificadoId)atualOrigem).getId())) {
+			return true;
+		}
+		return verificaSeAnteriorEhAnterior(anteriorId, ((IHaveEntidadeOrigem<E>)atualOrigem.getEntidadeOrigem()));
 	}
 }

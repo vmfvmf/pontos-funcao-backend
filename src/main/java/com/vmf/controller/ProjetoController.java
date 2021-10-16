@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vmf.dto.ProjetoDto;
 import com.vmf.entities.Projeto;
-import com.vmf.mappers.AbstractMapperBase;
-import com.vmf.mappers.ProjetoMapper;
 import com.vmf.service.AbstractService;
 import com.vmf.service.ProjetoService;
 
@@ -27,10 +25,7 @@ public class ProjetoController extends AbstractController<ProjetoDto, Projeto>{
 
 	@Autowired
 	private ProjetoService service;
-	
-	@Autowired
-	private ProjetoMapper mapper;
-		
+			
 	@GetMapping("/projetos")
 	public List<ProjetoDto> findAllDeds() {
 		return super.findAll();
@@ -57,12 +52,7 @@ public class ProjetoController extends AbstractController<ProjetoDto, Projeto>{
 	}
 
 	@Override
-	protected AbstractMapperBase<ProjetoDto, Projeto> getMapper() {
-		return mapper;
-	}
-
-	@Override
-	protected AbstractService<Projeto> getService() {
+	protected AbstractService<ProjetoDto, Projeto> getService() {
 		return service;
 	}
 }

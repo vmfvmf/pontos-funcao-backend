@@ -6,27 +6,24 @@ import java.util.Optional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.vmf.mappers.AbstractMapperBase;
 import com.vmf.service.AbstractService;
 
-public abstract class AbstractController<D, E> {
-	protected abstract AbstractMapperBase<D, E> getMapper();
-		
-	protected abstract AbstractService<E> getService();
+public abstract class AbstractController<D, E> {		
+	protected abstract AbstractService<D, E> getService();
 	
 	protected List<D> findAll(D filtro) {
-		E filtro2 = getMapper().convertToEntity(filtro);
-		return getMapper().convertToDtoList(getService().findAll(filtro2));
+		E filtro2 = getService().getMapper().convertToEntity(filtro);
+		return getService().getMapper().convertToDtoList(getService().findAll(filtro2));
 	}
 	
 	protected List<D> findAll() {
-		return getMapper().convertToDtoList(getService().findAll());
+		return getService().getMapper().convertToDtoList(getService().findAll());
 	}
 
 	protected D getEntityById(@PathVariable long id) throws Exception {
 		Optional<E> entity = getService().findById(id);
 		if (entity.isPresent()) {
-			return getMapper().convertToDto(entity.get());
+			return getService().getMapper().convertToDto(entity.get());
 		}
 		throw new Exception("Nenhum registro encontrado com o identificador informado.");
 	}
@@ -42,15 +39,15 @@ public abstract class AbstractController<D, E> {
 	protected D editEntity(Long id) throws Exception {
 		Optional<E> entity = getService().findById(id);
 		if (entity.isPresent()) {
-			return getMapper().convertToDto(getService().save(entity.get()));
+			return getService().getMapper().convertToDto(getService().save(entity.get()));
 		}
 		throw new Exception("Nenhum registro encontrado com o identificador informado.");
 	}
 	
 	private D newEditEntity(D dto) throws Exception {
-		E entity = getMapper().convertToEntity(dto);
+		E entity = getService().getMapper().convertToEntity(dto);
 		entity = getService().save(entity);
-		return getMapper().convertToDto(entity);
+		return getService().getMapper().convertToDto(entity);
 	}
 
 	protected void deleteEntity(@PathVariable Long id) {

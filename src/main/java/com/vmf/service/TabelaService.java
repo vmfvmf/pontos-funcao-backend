@@ -5,11 +5,18 @@ import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.vmf.dto.TabelaDto;
 import com.vmf.entities.Coluna;
 import com.vmf.entities.Tabela;
+import com.vmf.mappers.AbstractMapperBase;
+import com.vmf.mappers.TabelaMapperConverter;
 
 @Service("tabelaService")
-public class TabelaService extends AbstractService<Tabela>{
+public class TabelaService extends AbstractService<TabelaDto, Tabela>{
+	
+	@Autowired
+	private TabelaMapperConverter mapper;
+	
 	@Autowired
 	private ColunaService colunaService;
 
@@ -51,5 +58,10 @@ public class TabelaService extends AbstractService<Tabela>{
 			coluna.setTabela(tabela);
 			colunaService.trataEsbocoIncrementoVersao(coluna);
 		}
+	}
+
+	@Override
+	public AbstractMapperBase<TabelaDto, Tabela> getMapper() {
+		return mapper;
 	}
 }

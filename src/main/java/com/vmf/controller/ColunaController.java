@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vmf.dto.ColunaDto;
 import com.vmf.entities.Coluna;
-import com.vmf.mappers.AbstractMapperBase;
-import com.vmf.mappers.ColunaConverter;
 import com.vmf.service.AbstractService;
 import com.vmf.service.ColunaService;
 
@@ -24,9 +22,6 @@ public class ColunaController extends AbstractController<ColunaDto, Coluna>{
 	@Autowired
 	private ColunaService colunaService;
 	
-	@Autowired
-	private ColunaConverter mapper;
-
 	@GetMapping("/colunas")
 	public List<ColunaDto> findAllColunas(ColunaDto filtro) {
 		return super.findAll(filtro);
@@ -53,12 +48,7 @@ public class ColunaController extends AbstractController<ColunaDto, Coluna>{
 	}
 
 	@Override
-	protected AbstractMapperBase<ColunaDto, Coluna> getMapper() {
-		return mapper;
-	}
-
-	@Override
-	protected AbstractService<Coluna> getService() {
+	protected AbstractService<ColunaDto, Coluna> getService() {
 		return colunaService;
 	}
 

@@ -2,6 +2,7 @@ package com.vmf.entities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,10 +14,13 @@ import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.DiscriminatorOptions;
 
+import com.vmf.interfaces.IHaveCriadoModificadoId;
+import com.vmf.interfaces.IHaveGetObjetos;
+
 @Entity
 @DiscriminatorValue("T")
 @DiscriminatorOptions(force = true)
-public class ContagemItemTransacao extends AbstractContagemItem {
+public class ContagemItemTransacao extends AbstractContagemItem implements IHaveGetObjetos{
 
 	/**
 	 * 
@@ -84,4 +88,10 @@ public class ContagemItemTransacao extends AbstractContagemItem {
 		
 		return nova;
 	}
+
+	@Override
+	public List<IHaveCriadoModificadoId> getObjetos() {
+		return getTransacaoTDs().stream().map(t -> ((IHaveCriadoModificadoId)t)).collect(Collectors.toList());
+	}
+
 }

@@ -9,15 +9,21 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.vmf.dto.ContagemItemTransacaoDto;
 import com.vmf.entities.AbstractContagemItem;
 import com.vmf.entities.Coluna;
 import com.vmf.entities.ContagemItemTransacao;
 import com.vmf.entities.TransacaoTD;
+import com.vmf.mappers.AbstractMapperBase;
+import com.vmf.mappers.ContagemItemTransacaoConverter;
 
 @Service("contagemItemTransacaoService")
-public class ContagemItemTransacaoService extends AbstractService<ContagemItemTransacao> {
+public class ContagemItemTransacaoService extends AbstractService<ContagemItemTransacaoDto, ContagemItemTransacao> {
 	@Autowired
 	private TransacaoTDService transacaoTDService;
+	
+	@Autowired
+	private ContagemItemTransacaoConverter mapper;
 	
 	@Override
 	public void prepareToSave(ContagemItemTransacao entity) {
@@ -83,5 +89,10 @@ public class ContagemItemTransacaoService extends AbstractService<ContagemItemTr
 			
 			transacaoTDService.trataEsbocoIncrementoVersao(td);
 		}
+	}
+
+	@Override
+	public AbstractMapperBase<ContagemItemTransacaoDto, ContagemItemTransacao> getMapper() {
+		return mapper;
 	}
 }

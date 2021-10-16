@@ -2,10 +2,14 @@ package com.vmf.dto;
 
 import java.time.LocalDate;
 
+import com.vmf.entities.AbstractContagemItem;
 import com.vmf.enums.ComplexidadeItemEnum;
 import com.vmf.enums.ContagemItemFuncaoEnum;
+import com.vmf.enums.ContagemDadoSituacaoEnum;
+import com.vmf.interfaces.IHaveCriadoModificadoId;
 
-public abstract class AbstractContagemItemDto extends AbstractBaseDto{
+public abstract class AbstractContagemItemDto extends AbstractBaseDto implements IHaveCriadoModificadoId {
+	
 	private String nome;
 	private Integer td;
 	private Integer tr;	
@@ -14,6 +18,13 @@ public abstract class AbstractContagemItemDto extends AbstractBaseDto{
 	private ContagemItemFuncaoEnum funcao;
 	private LocalDate criado;
 	private LocalDate modificado;
+	
+	private ContagemDadoSituacaoEnum alteradoDadoContagem;
+	private Integer alteradoTd;
+	private Integer alteradoTr;	
+	private ComplexidadeItemEnum alteradoComplexidade;
+	private Integer alteradoPf;
+	private ContagemItemFuncaoEnum alteradoFuncao;
 
 	public String getNome() {
 		return nome;
@@ -77,6 +88,79 @@ public abstract class AbstractContagemItemDto extends AbstractBaseDto{
 
 	public void setModificado(LocalDate modificado) {
 		this.modificado = modificado;
+	}
+
+	
+	public Integer getAlteradoTd() {
+		return alteradoTd;
+	}
+
+	public void setAlteradoTd(Integer alteradoTd) {
+		this.alteradoTd = alteradoTd;
+	}
+
+	public Integer getAlteradoTr() {
+		return alteradoTr;
+	}
+
+	public void setAlteradoTr(Integer alteradoTr) {
+		this.alteradoTr = alteradoTr;
+	}
+
+	public ComplexidadeItemEnum getAlteradoComplexidade() {
+		return alteradoComplexidade;
+	}
+
+	public void setAlteradoComplexidade(ComplexidadeItemEnum alteradoComplexidade) {
+		this.alteradoComplexidade = alteradoComplexidade;
+	}
+
+	public Integer getAlteradoPf() {
+		return alteradoPf;
+	}
+
+	public void setAlteradoPf(Integer alteradoPf) {
+		this.alteradoPf = alteradoPf;
+	}
+
+	public ContagemItemFuncaoEnum getAlteradoFuncao() {
+		return alteradoFuncao;
+	}
+
+	public void setAlteradoFuncao(ContagemItemFuncaoEnum alteradoFuncao) {
+		this.alteradoFuncao = alteradoFuncao;
+	}
+
+	public ContagemDadoSituacaoEnum getAlteradoDadoContagem() {
+		return alteradoDadoContagem;
+	}
+
+	public void setAlteradoDadoContagem(ContagemDadoSituacaoEnum alteradoDadoContagem) {
+		this.alteradoDadoContagem = alteradoDadoContagem;
 	}	
+	
+
+	public void checkComparacao(AbstractContagemItem anterior) {
+		if (!getTd().equals(anterior.getTd())) {
+			setAlteradoTd(anterior.getTd());
+			setAlteradoDadoContagem(ContagemDadoSituacaoEnum.ALTERADO);
+		}
+		if (!getTr().equals(anterior.getTr())) {
+			setAlteradoTr(anterior.getTr());
+			setAlteradoDadoContagem(ContagemDadoSituacaoEnum.ALTERADO);			
+		}
+		if (!getComplexidade().equals(anterior.getComplexidade())) {
+			setAlteradoComplexidade(anterior.getComplexidade());
+			setAlteradoDadoContagem(ContagemDadoSituacaoEnum.ALTERADO);			
+		}
+		if (!getPf().equals(anterior.getPf())) {
+			setPf(anterior.getPf());
+			setAlteradoDadoContagem(ContagemDadoSituacaoEnum.ALTERADO);			
+		}
+		if (!getFuncao().equals(anterior.getFuncao())) {
+			setFuncao(anterior.getFuncao());
+			setAlteradoDadoContagem(ContagemDadoSituacaoEnum.ALTERADO);			
+		}
+	}
 	
 }

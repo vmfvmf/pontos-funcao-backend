@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vmf.dto.SistemaDto;
 import com.vmf.entities.Sistema;
-import com.vmf.mappers.AbstractMapperBase;
-import com.vmf.mappers.SistemaMapper;
 import com.vmf.service.AbstractService;
 import com.vmf.service.SistemaService;
 
@@ -24,9 +22,6 @@ public class SistemaController extends AbstractController<SistemaDto, Sistema> {
 	@Autowired
 	private SistemaService sistemaService;
 	
-	@Autowired
-	private SistemaMapper sistemaMapper;
-
 	@GetMapping("/sistemas")
 	public List<SistemaDto> findAllSistemas() {
 		return super.findAll();
@@ -53,12 +48,7 @@ public class SistemaController extends AbstractController<SistemaDto, Sistema> {
 	}
 
 	@Override
-	protected AbstractMapperBase<SistemaDto, Sistema> getMapper() {
-		return sistemaMapper;
-	}
-
-	@Override
-	protected AbstractService<Sistema> getService() {
+	protected AbstractService<SistemaDto, Sistema> getService() {
 		return sistemaService;
 	}
 }

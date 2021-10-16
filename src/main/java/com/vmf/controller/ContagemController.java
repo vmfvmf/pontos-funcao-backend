@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vmf.dto.ContagemDto;
 import com.vmf.entities.Contagem;
-import com.vmf.mappers.AbstractMapperBase;
-import com.vmf.mappers.ContagemMapper;
 import com.vmf.service.AbstractService;
 import com.vmf.service.ContagemService;
 
@@ -26,9 +24,6 @@ public class ContagemController extends AbstractController<ContagemDto, Contagem
 
 	@Autowired
 	private ContagemService contagemService;
-	
-	@Autowired
-	private ContagemMapper contagemMapper;
 	
 	@GetMapping("/contagens")
 	public List<ContagemDto> findAllContagens(ContagemDto filtro) {
@@ -46,7 +41,7 @@ public class ContagemController extends AbstractController<ContagemDto, Contagem
 	}
 	
 	@GetMapping("/contagens/{id}")
-	public ContagemDto getContagemById(@PathVariable Integer id) throws Exception {
+	public ContagemDto getContagemById(@PathVariable Long id) throws Exception {
 		return super.getEntityById(id);
 	}
 	
@@ -68,6 +63,11 @@ public class ContagemController extends AbstractController<ContagemDto, Contagem
 		return super.editEntity(id);
 	}
 	
+	@GetMapping("/contagens/{id}/comparar-versao-anterior/{idVersaoAnterior}")
+	public ContagemDto compararContagens(@PathVariable Long id, @PathVariable Long idVersaoAnterior) throws Exception {
+		return contagemService.compararVersoes(id, idVersaoAnterior);
+	}
+	
 	
 	@DeleteMapping("/contagens/{id}")
 	public void delete(@PathVariable Long id) {
@@ -75,12 +75,7 @@ public class ContagemController extends AbstractController<ContagemDto, Contagem
 	}
 
 	@Override
-	protected AbstractMapperBase<ContagemDto, Contagem> getMapper() {
-		return contagemMapper;
-	}
-
-	@Override
-	protected AbstractService<Contagem> getService() {
+	protected AbstractService<ContagemDto, Contagem> getService() {
 		return contagemService;
 	}
 

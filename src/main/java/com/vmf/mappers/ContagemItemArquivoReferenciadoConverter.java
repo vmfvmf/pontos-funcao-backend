@@ -44,7 +44,7 @@ public class ContagemItemArquivoReferenciadoConverter extends AbstractMapperBase
 				ContagemItemArquivoReferenciado entidade = getModelMapper().map(source, ContagemItemArquivoReferenciado.class);
 				if (entidade.getId() != null) {
 					ContagemItemArquivoReferenciado origem = service.findById(entidade.getId()).get();
-					entidade.setContagemItemOrigem(origem.getContagemItemOrigem());
+					entidade.setContagemItemOrigem(origem.getEntidadeOrigem());
 				}
 				return entidade;
 			}			
@@ -60,5 +60,6 @@ public class ContagemItemArquivoReferenciadoConverter extends AbstractMapperBase
 	@Override
 	public ContagemItemArquivoReferenciadoDto convertToDto(ContagemItemArquivoReferenciado entity) {
 		return convertToTarget(entity, ContagemItemArquivoReferenciadoDto.class);
-	}	
+	}
+
 }

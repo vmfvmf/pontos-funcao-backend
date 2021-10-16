@@ -4,11 +4,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.vmf.entities.Contagem;
 import com.vmf.enums.ContagemEscopoEnum;
 import com.vmf.enums.ContagemEstado;
 
 
-public class ContagemDto extends AbstractBaseDto{
+public class ContagemDto extends AbstractBaseDto {
 	private SistemaDto sistema;
 	private String contador;
 	private LocalDate dataContagem;
@@ -23,6 +24,12 @@ public class ContagemDto extends AbstractBaseDto{
 	private LocalDate criado; 
 	private LocalDate modificado;
 	private Boolean ultimaVersao;
+	
+	/* PROPRIEDADES DE COMPARAÇÃO COM ANTERIOR */
+	private Boolean compararVersao;
+	private String alteradoContador;
+	private LocalDate alteradoDataContagem;
+	private Integer alteradoTotalPontosFuncao;
 	
 	public Integer getTotalPontosFuncao() {
 		return totalPontosFuncao;
@@ -134,5 +141,51 @@ public class ContagemDto extends AbstractBaseDto{
 
 	public void setUltimaVersao(Boolean ultimaVersao) {
 		this.ultimaVersao = ultimaVersao;
-	}	
+	}
+
+	public Boolean getCompararVersao() {
+		return compararVersao;
+	}
+
+	public void setCompararVersao(Boolean compararVersao) {
+		this.compararVersao = compararVersao;
+	}
+
+	public String getAlteradoContador() {
+		return alteradoContador;
+	}
+
+	public void setAlteradoContador(String alteradoContador) {
+		this.alteradoContador = alteradoContador;
+	}
+
+	public LocalDate getAlteradoDataContagem() {
+		return alteradoDataContagem;
+	}
+
+	public void setAlteradoDataContagem(LocalDate alteradoDataContagem) {
+		this.alteradoDataContagem = alteradoDataContagem;
+	}
+
+	public Integer getAlteradoTotalPontosFuncao() {
+		return alteradoTotalPontosFuncao;
+	}
+
+	public void setAlteradoTotalPontosFuncao(Integer alteradoTotalPontosFuncao) {
+		this.alteradoTotalPontosFuncao = alteradoTotalPontosFuncao;
+	}
+
+	public void checkComparacao(Contagem anterior) {
+		if (!getContador().equals(anterior.getContador())) {
+			setAlteradoContador(anterior.getContador());
+		}
+		
+		if (!getDataContagem().equals(anterior.getDataContagem())) {
+			setAlteradoDataContagem(anterior.getDataContagem());
+		}
+		
+		if (!getTotalPontosFuncao().equals(anterior.getTotalPontosFuncao())) {
+			setAlteradoTotalPontosFuncao(anterior.getTotalPontosFuncao());
+		}
+	}
 }

@@ -22,10 +22,11 @@ import javax.persistence.Table;
 import com.vmf.enums.ContagemEscopoEnum;
 import com.vmf.enums.ContagemEstado;
 import com.vmf.interfaces.IHaveCriadoModificadoId;
+import com.vmf.interfaces.IHaveEntidadeOrigem;
 
 @Entity
 @Table
-public class Contagem extends AbstractBase implements IHaveCriadoModificadoId {
+public class Contagem extends AbstractBase implements IHaveEntidadeOrigem<Contagem>, IHaveCriadoModificadoId {
 	/**
 	 * 
 	 */
@@ -202,11 +203,11 @@ public class Contagem extends AbstractBase implements IHaveCriadoModificadoId {
 		this.arquivosReferenciados = arquivosReferenciados;
 	}
 
-	public Contagem getContagemOrigem() {
+	public Contagem getEntidadeOrigem() {
 		return contagemOrigem;
 	}
 
-	public void setContagemOrigem(Contagem contagemOrigem) {
+	public void setEntidadeOrigem(Contagem contagemOrigem) {
 		this.contagemOrigem = contagemOrigem;
 	}
 
@@ -261,7 +262,7 @@ public class Contagem extends AbstractBase implements IHaveCriadoModificadoId {
 	public Contagem criarEsbocoVersionado() {
 		Contagem contagem = new Contagem();
 		contagem.setContador(this.getContador());
-		contagem.setContagemOrigem(calculateContagemOrigem());
+		contagem.setEntidadeOrigem(calculateContagemOrigem());
 		contagem.setDataContagem(LocalDate.now());
 		contagem.setEscopo(this.getEscopo());
 		contagem.setEstado(ContagemEstado.E);
@@ -283,11 +284,20 @@ public class Contagem extends AbstractBase implements IHaveCriadoModificadoId {
 			contagem.getTransacoes().add(novaTransacao);
 		}
 		
+		// REGISTRA A COLUNA DOS TDS DAS TRANSACOES 
+		List<Coluna> colunas = new ArrayList<>();
+		contagem.getArquivosReferenciados().forEach(arq -> arq.getTabelas()
+				.forEach(tab -> tab.getColunas().forEach(col -> colunas.add(col))));
+		
+		contagem.getTransacoes().forEach(trans -> trans.getTransacaoTDs().forEach(td -> td.setColuna(
+				colunas.stream().filter(col -> col.getColunaOrigem().equals(td.getTransacaoTDOrigem().getColuna()))
+				.findFirst().get()
+		)));
+		
 		return contagem;
 	}
 	
 	private Contagem calculateContagemOrigem() {
 		return  this.contagemOrigem != null && this.equals(this.contagemOrigem) ? this.contagemOrigem : this;
 	}
-	
 }

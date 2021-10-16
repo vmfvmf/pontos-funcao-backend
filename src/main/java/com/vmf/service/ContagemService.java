@@ -1,22 +1,29 @@
 package com.vmf.service;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.vmf.dto.ContagemDto;
 import com.vmf.entities.Contagem;
 import com.vmf.entities.ContagemItemArquivoReferenciado;
 import com.vmf.entities.ContagemItemTransacao;
 import com.vmf.enums.ContagemEstado;
+import com.vmf.mappers.AbstractMapperBase;
+import com.vmf.mappers.ContagemMapper;
 
 @Service("contagemService")
-public class ContagemService extends AbstractService<Contagem> {
+public class ContagemService extends AbstractService<ContagemDto, Contagem> {
 	@Autowired
 	private ContagemItemArquivoReferenciadoService arqService;
 	
 	@Autowired
 	private ContagemItemTransacaoService contagemItemTransacaoService;
+	
+	@Autowired
+	private ContagemMapper mapper;
 	
 	@Override
 	public void prepareToSave(Contagem entity) {		
@@ -102,5 +109,23 @@ public class ContagemService extends AbstractService<Contagem> {
 			entidade = this.save(nova);
 			return entidade;
 		});
+	}
+
+	public ContagemDto compararVersoes(Long id, Long idVersaoAnterior) throws Exception {
+		Optional<Contagem> atual = findById(id);
+		Optional<Contagem> anterior = findById(idVersaoAnterior);
+		
+		if (atual.isEmpty() || anterior.isEmpty()) {
+			throw new Exception("Foi informado algum identificador inválido para comparação.");
+		} else if (!verificaSeAnteriorEhAnterior(atual.get().getEntidadeOrigem(), anterior.get())) {
+			throw new Exception("A contagem selecionada como anterior não é anterior a contagem atual.");
+		}
+		
+		return mapper.convertCompararVersoes(atual.get(), anterior.get());
+	}
+
+	@Override
+	public AbstractMapperBase<ContagemDto, Contagem> getMapper() {
+		return mapper;
 	}
 }

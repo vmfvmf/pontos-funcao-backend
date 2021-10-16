@@ -11,6 +11,7 @@ import com.vmf.service.ContagemItemTransacaoService;
 
 @Service("contagemItemTransacaoConverter")
 public class ContagemItemTransacaoConverter extends AbstractMapperBase<ContagemItemTransacaoDto, ContagemItemTransacao> {
+	
 	@Autowired
 	private ContagemItemTransacaoService service; 
 	
@@ -44,7 +45,7 @@ public class ContagemItemTransacaoConverter extends AbstractMapperBase<ContagemI
 				ContagemItemTransacao entidade = getModelMapper().map(source, ContagemItemTransacao.class);
 				if (entidade.getId() != null) {
 					ContagemItemTransacao origem = service.findById(entidade.getId()).get();
-					entidade.setContagemItemOrigem(origem.getContagemItemOrigem());
+					entidade.setContagemItemOrigem(origem.getEntidadeOrigem());
 				}
 				return entidade;
 			}			

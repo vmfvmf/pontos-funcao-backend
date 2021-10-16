@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vmf.dto.GrupoDto;
 import com.vmf.entities.Grupo;
-import com.vmf.mappers.AbstractMapperBase;
-import com.vmf.mappers.GrupoMapper;
 import com.vmf.service.AbstractService;
 import com.vmf.service.GrupoTransacaoService;
 
@@ -23,10 +21,7 @@ public class GrupoController extends AbstractController<GrupoDto, Grupo>{
 	
 	@Autowired
 	private GrupoTransacaoService service;
-	
-	@Autowired
-	private GrupoMapper mapper;
-		
+			
 	@GetMapping("/grupos")
 	public List<GrupoDto> findAllGrupos() {
 		return super.findAll();
@@ -52,14 +47,9 @@ public class GrupoController extends AbstractController<GrupoDto, Grupo>{
 		super.deleteEntity(id);
 	}
 
-
 	@Override
-	protected AbstractMapperBase<GrupoDto, Grupo> getMapper() {
-		return mapper;
-	}
-
-	@Override
-	protected AbstractService<Grupo> getService() {
+	protected AbstractService<GrupoDto, Grupo> getService() {
 		return service;
 	}
+
 }
