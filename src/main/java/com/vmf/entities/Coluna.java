@@ -150,7 +150,7 @@ public class Coluna extends AbstractBase implements IHaveCriadoModificadoId {
 		}
 		return this.getEntidadeOrigem().findOrigemDaSelecionada(compararOrigem);
 	}
-
+// teste
 	public Boolean checkIsOrigemDaLista(Coluna origemSelecionada, List<ColunaDto> colunas) {
 		for(int i = 0; i < colunas.size(); i++) {
 			ColunaDto col = colunas.get(i);
