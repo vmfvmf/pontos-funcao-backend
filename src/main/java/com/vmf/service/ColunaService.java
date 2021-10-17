@@ -37,7 +37,7 @@ public class ColunaService extends AbstractService<ColunaDto, Coluna> {
 
 	public void trataEsbocoIncrementoVersao(Coluna coluna) {
 		Coluna colParent = findById(coluna.getId()).get();
-		coluna.setColunaOrigem(colParent);
+		coluna.setEntidadeOrigem(colParent);
 		setCriadoModificadoId(coluna);
 	}
 

@@ -1,6 +1,7 @@
 package com.vmf.entities;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -13,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.vmf.dto.ColunaDto;
 import com.vmf.interfaces.IHaveCriadoModificadoId;
 
 
@@ -38,13 +40,15 @@ public class Coluna extends AbstractBase implements IHaveCriadoModificadoId {
 	
 	@OneToOne
 	@JoinColumn(name="coluna_origem_id")
-	private Coluna colunaOrigem;
+	private Coluna entidadeOrigem;
 	
 	@Column
 	private LocalDate criado;
 	
 	@Column
 	private LocalDate modificado;
+	
+	private transient Boolean compararVersao = false;
 	
 	public void setNome(String nome) {
 		this.nome = nome;
@@ -70,12 +74,12 @@ public class Coluna extends AbstractBase implements IHaveCriadoModificadoId {
 		this.tabela = tabela;
 	}
 
-	public Coluna getColunaOrigem() {
-		return colunaOrigem;
+	public Coluna getEntidadeOrigem() {
+		return entidadeOrigem;
 	}
 
-	public void setColunaOrigem(Coluna colunaOrigem) {
-		this.colunaOrigem = colunaOrigem;
+	public void setEntidadeOrigem(Coluna colunaOrigem) {
+		this.entidadeOrigem = colunaOrigem;
 	}
 
 	public LocalDate getCriado() {
@@ -94,11 +98,23 @@ public class Coluna extends AbstractBase implements IHaveCriadoModificadoId {
 		this.modificado = modificado;
 	}
 	
+	public Boolean getCompararVersao() {
+		return compararVersao;
+	}
+
+	public void setCompararVersao(Boolean compararVersao) {
+		this.compararVersao = compararVersao;
+	}
+
 	public Boolean equals (Coluna other) {
 		Boolean equals = false;
 		
+		if (other == null) {
+			return false;
+		}
+		
 		equals = getId().equals(other.getId());
-		equals = Objects.equals(getColunaOrigem(), other.getColunaOrigem()) || equals;
+		equals = Objects.equals(getEntidadeOrigem(), other.getEntidadeOrigem()) || equals;
 		equals = getNome().equals(other.getNome()) || equals;
 		equals = getTabela().equals(other.getTabela()) || equals;
 		
@@ -110,13 +126,54 @@ public class Coluna extends AbstractBase implements IHaveCriadoModificadoId {
 		Coluna nova = new Coluna();
 		nova.setCriado(LocalDate.now());
 		nova.setNome(getNome());
-		nova.setColunaOrigem(calculateColunaOrigem());		
+		nova.setEntidadeOrigem(this);		
 		
 		return nova;
 	}
 	
-	private Coluna calculateColunaOrigem() {
-		return  this.getColunaOrigem() != null && this.equals(this.getColunaOrigem())
-				?  this.getColunaOrigem() : this;
+	public Coluna findOrigemDaSelecionada(List<Coluna> compararOrigem) {
+		if (compararOrigem.contains(this)) {
+			return this;
+		}
+		if (this.getEntidadeOrigem() == null) {
+			return null;
+		}
+		return this.getEntidadeOrigem().findOrigemDaSelecionada(compararOrigem);
 	}
+	
+	public Coluna findOrigemDaSelecionada(Coluna compararOrigem) {
+		if (compararOrigem.equals(this)) {
+			return this;
+		}
+		if (this.getEntidadeOrigem() == null) {
+			return null;
+		}
+		return this.getEntidadeOrigem().findOrigemDaSelecionada(compararOrigem);
+	}
+
+	public Boolean checkIsOrigemDaLista(Coluna origemSelecionada, List<ColunaDto> colunas) {
+		for(int i = 0; i < colunas.size(); i++) {
+			ColunaDto col = colunas.get(i);
+			if (origemSelecionada.getId() == col.getEntidadeOrigem().getId()) {
+				colunas.remove(col);
+				return true;
+			} else if (col.getEntidadeOrigem() != null) {
+				if (checkIsOrigem(origemSelecionada, col.getEntidadeOrigem())) {
+					colunas.remove(col);
+					return true;
+				}
+			}
+		};
+		return false;
+	}
+	
+	public Boolean checkIsOrigem(Coluna origemSelecionada, Coluna atual) {
+		if (atual == null) {
+			return false;
+		} else if (atual.getId() == origemSelecionada.getId()) {
+			return true;
+		}
+		return checkIsOrigem(origemSelecionada, atual.getEntidadeOrigem());
+	}
+	
 }

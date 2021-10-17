@@ -44,13 +44,15 @@ public class Tabela extends AbstractBase implements IHaveCriadoModificadoId {
 	
 	@OneToOne
 	@JoinColumn(name="tabela_origem_id")
-	private Tabela tabelaOrigem;
+	private Tabela entidadeOrigem;
 	
 	@Column
 	private LocalDate criado;
 	
 	@Column
 	private LocalDate modificado;
+	
+	private transient Boolean compararVersao = false;
 
 	public Long getId() {
 		return id;
@@ -84,12 +86,12 @@ public class Tabela extends AbstractBase implements IHaveCriadoModificadoId {
 		this.arquivoReferenciado = arquivoReferenciado;
 	}
 
-	public Tabela getTabelaOrigem() {
-		return tabelaOrigem;
+	public Tabela getEntidadeOrigem() {
+		return entidadeOrigem;
 	}
 
-	public void setTabelaOrigem(Tabela tabelaOrigem) {
-		this.tabelaOrigem = tabelaOrigem;
+	public void setEntidadeOrigem(Tabela tabelaOrigem) {
+		this.entidadeOrigem = tabelaOrigem;
 	}
 
 	public LocalDate getCriado() {
@@ -108,12 +110,20 @@ public class Tabela extends AbstractBase implements IHaveCriadoModificadoId {
 		this.modificado = modificado;
 	}
 
+	public Boolean getCompararVersao() {
+		return compararVersao;
+	}
+
+	public void setCompararVersao(Boolean compararVersao) {
+		this.compararVersao = compararVersao;
+	}
+
 	@Override
 	public Tabela clone() {
 		Tabela nova = new Tabela();
 		nova.setCriado(LocalDate.now());
 		nova.setNome(getNome());
-		nova.setTabelaOrigem(calculateTabelaOrigem());		
+		nova.setEntidadeOrigem(this);		
 		
 		for(Coluna coluna : getColunas()) {
 			Coluna novaColuna = coluna.clone();
@@ -123,8 +133,14 @@ public class Tabela extends AbstractBase implements IHaveCriadoModificadoId {
 		return nova;
 	}
 	
-	private Tabela calculateTabelaOrigem() {
-		return  this.getTabelaOrigem() != null && this.equals(this.getTabelaOrigem())
-				?  this.getTabelaOrigem() : this;
+	public Tabela findOrigemDaSelecionada(
+			List<Tabela> compararOrigem) {
+		if (compararOrigem.contains(this)) {
+			return this;
+		}
+		if (this.getEntidadeOrigem() == null) {
+			return null;
+		}
+		return this.getEntidadeOrigem().findOrigemDaSelecionada(compararOrigem);
 	}
 }

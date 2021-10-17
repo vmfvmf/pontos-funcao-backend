@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vmf.entities.Contagem;
 import com.vmf.enums.ContagemEscopoEnum;
 import com.vmf.enums.ContagemEstado;
@@ -26,7 +27,9 @@ public class ContagemDto extends AbstractBaseDto {
 	private Boolean ultimaVersao;
 	
 	/* PROPRIEDADES DE COMPARAÇÃO COM ANTERIOR */
+	@JsonIgnore
 	private Boolean compararVersao;
+	
 	private String alteradoContador;
 	private LocalDate alteradoDataContagem;
 	private Integer alteradoTotalPontosFuncao;

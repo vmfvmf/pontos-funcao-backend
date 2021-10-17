@@ -2,6 +2,8 @@ package com.vmf.dto;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.vmf.entities.Coluna;
 import com.vmf.enums.ContagemDadoSituacaoEnum;
 
 public class ColunaDto extends AbstractBaseDto{
@@ -9,8 +11,14 @@ public class ColunaDto extends AbstractBaseDto{
 	private LocalDate criado; 
 	private LocalDate modificado;
 	
+	@JsonIgnore
+	private Boolean compararVersao;
+	
 	private ContagemDadoSituacaoEnum alteradoDadoContagem;
 	private String alteradoNome;
+	
+	@JsonIgnore
+	private Coluna entidadeOrigem;
 	
 	public void setNome(String nome) {
 		this.nome = nome;
@@ -36,6 +44,14 @@ public class ColunaDto extends AbstractBaseDto{
 		this.modificado = modificado;
 	}
 
+	public Boolean getCompararVersao() {
+		return compararVersao;
+	}
+
+	public void setCompararVersao(Boolean compararVersao) {
+		this.compararVersao = compararVersao;
+	}
+
 	public String getAlteradoNome() {
 		return alteradoNome;
 	}
@@ -50,6 +66,21 @@ public class ColunaDto extends AbstractBaseDto{
 
 	public void setAlteradoDadoContagem(ContagemDadoSituacaoEnum alteradoDadoContagem) {
 		this.alteradoDadoContagem = alteradoDadoContagem;
+	}
+
+	public Coluna getEntidadeOrigem() {
+		return entidadeOrigem;
+	}
+
+	public void setEntidadeOrigem(Coluna entidadeOrigem) {
+		this.entidadeOrigem = entidadeOrigem;
+	}
+
+	public void checkComparacao(Coluna anterior) {
+		if (!getNome().equals(anterior.getNome())) {
+			setAlteradoNome(anterior.getNome());
+			setAlteradoDadoContagem(ContagemDadoSituacaoEnum.ALTERADO);
+		}
 	}
 
 }

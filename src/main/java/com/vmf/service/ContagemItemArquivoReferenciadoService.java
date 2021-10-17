@@ -6,10 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.vmf.dto.ContagemItemArquivoReferenciadoDto;
-import com.vmf.entities.AbstractContagemItem;
 import com.vmf.entities.ContagemItemArquivoReferenciado;
 import com.vmf.entities.Tabela;
-import com.vmf.mappers.AbstractMapperBase;
 import com.vmf.mappers.ContagemItemArquivoReferenciadoConverter;
 
 @Service("abstractContagemItemService")
@@ -48,8 +46,8 @@ public class ContagemItemArquivoReferenciadoService extends AbstractService<Cont
 	}
 
 	public void trataEsbocoIncrementoVersao(ContagemItemArquivoReferenciado arquivo) {
-		AbstractContagemItem arqParent = findById(arquivo.getId()).get();
-		arquivo.setContagemItemOrigem(arqParent);
+		ContagemItemArquivoReferenciado arqParent = findById(arquivo.getId()).get();
+		arquivo.setEntidadeOrigem(arqParent);
 		setCriadoModificadoId(arquivo);
 		
 		for (Tabela tabela : arquivo.getTabelas()) {
@@ -59,7 +57,7 @@ public class ContagemItemArquivoReferenciadoService extends AbstractService<Cont
 	}
 
 	@Override
-	public AbstractMapperBase<ContagemItemArquivoReferenciadoDto, ContagemItemArquivoReferenciado> getMapper() {
+	public ContagemItemArquivoReferenciadoConverter getMapper() {
 		return mapper;
 	}
 }

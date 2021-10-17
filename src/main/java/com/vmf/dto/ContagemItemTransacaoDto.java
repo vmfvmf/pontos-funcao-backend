@@ -4,9 +4,10 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vmf.entities.ContagemItemTransacao;
+import com.vmf.enums.ContagemDadoSituacaoEnum;
 import com.vmf.interfaces.IDtoComparaVersao;
 
-public class ContagemItemTransacaoDto extends AbstractContagemItemDto
+public class ContagemItemTransacaoDto extends AbstractContagemItemDto<ContagemItemTransacao>
 implements IDtoComparaVersao<ContagemItemTransacao, TransacaoTDDto> {
 	private List<TransacaoTDDto> transacaoTDs;
 	private GrupoDto grupo;
@@ -73,17 +74,24 @@ implements IDtoComparaVersao<ContagemItemTransacao, TransacaoTDDto> {
 		this.alteradoMensagem = alteradoMensagem;
 	}
 
-
-	@Override
-	public void checkComparacao(ContagemItemTransacao entidadeAnterior) {
-		super.checkComparacao(entidadeAnterior);
-	}
-
 	@JsonIgnore
 	@Override
 	public List<TransacaoTDDto> getObjetos() {
 		return getTransacaoTDs();
 	}
 
+	@Override
+	public void checkComparacao(ContagemItemTransacao entidadeAnterior) {
+		ContagemItemTransacao anteriorTransacao = entidadeAnterior;
+		super.checkSuperComparacao(entidadeAnterior);
+		if (!isAcao().equals(anteriorTransacao.isAcao())) {
+			setAlteradoAcao(anteriorTransacao.isAcao());
+			setAlteradoDadoContagem(ContagemDadoSituacaoEnum.ALTERADO);			
+		}
+		if (!isMensagem().equals(anteriorTransacao.isMensagem())) {
+			setAlteradoMensagem(anteriorTransacao.isMensagem());	
+			setAlteradoDadoContagem(ContagemDadoSituacaoEnum.ALTERADO);	
+		}
+	}
 	
 }

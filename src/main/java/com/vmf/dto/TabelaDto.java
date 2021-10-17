@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.vmf.entities.Tabela;
 import com.vmf.enums.ContagemDadoSituacaoEnum;
 import com.vmf.interfaces.IHaveCriadoModificadoId;
 
@@ -13,9 +15,14 @@ public class TabelaDto extends AbstractBaseDto implements IHaveCriadoModificadoI
 	private LocalDate criado; 
 	private LocalDate modificado;
 	
+	@JsonIgnore
+	private Boolean compararVersao;
+	
 	private ContagemDadoSituacaoEnum alteradoDadoContagem;
 	private String alteradoNome;
-	private String alteradoColunas;
+	
+	@JsonIgnore
+	private Tabela entidadeOrigem;
 
 	public List<ColunaDto> getColunas() {
 		return colunas;
@@ -49,6 +56,14 @@ public class TabelaDto extends AbstractBaseDto implements IHaveCriadoModificadoI
 		this.modificado = modificado;
 	}
 
+	public Boolean getCompararVersao() {
+		return compararVersao;
+	}
+
+	public void setCompararVersao(Boolean compararVersao) {
+		this.compararVersao = compararVersao;
+	}
+
 	public String getAlteradoNome() {
 		return alteradoNome;
 	}
@@ -57,19 +72,26 @@ public class TabelaDto extends AbstractBaseDto implements IHaveCriadoModificadoI
 		this.alteradoNome = alteradoNome;
 	}
 
-	public String getAlteradoColunas() {
-		return alteradoColunas;
-	}
-
-	public void setAlteradoColunas(String alteradoColunas) {
-		this.alteradoColunas = alteradoColunas;
-	}
-
 	public ContagemDadoSituacaoEnum getAlteradoDadoContagem() {
 		return alteradoDadoContagem;
 	}
 
 	public void setAlteradoDadoContagem(ContagemDadoSituacaoEnum alteradoDadoContagem) {
 		this.alteradoDadoContagem = alteradoDadoContagem;
+	}
+
+	public Tabela getEntidadeOrigem() {
+		return entidadeOrigem;
+	}
+
+	public void setEntidadeOrigem(Tabela entidadeOrigem) {
+		this.entidadeOrigem = entidadeOrigem;
+	}
+
+	public void checkComparacao(Tabela anterior) {
+		if (!getNome().equals(anterior.getNome())) {
+			setAlteradoNome(anterior.getNome());
+			setAlteradoDadoContagem(ContagemDadoSituacaoEnum.ALTERADO);
+		}
 	}
 }

@@ -2,6 +2,7 @@ package com.vmf.dto;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vmf.enums.ContagemDadoSituacaoEnum;
 
 public class TransacaoTDDto extends AbstractBaseDto {
@@ -9,7 +10,13 @@ public class TransacaoTDDto extends AbstractBaseDto {
 	private LocalDate criado; 
 	private LocalDate modificado;
 	
+	@JsonIgnore
+	private Boolean compararVersao; 
+	
 	private ContagemDadoSituacaoEnum alteradoDadoContagem;
+	
+	@JsonIgnore
+	private ColunaDto entidadeOrigem;
 
 	public ColunaDto getColuna() {
 		return coluna;
@@ -35,6 +42,14 @@ public class TransacaoTDDto extends AbstractBaseDto {
 		this.modificado = modificado;
 	}
 
+	public Boolean getCompararVersao() {
+		return compararVersao;
+	}
+
+	public void setCompararVersao(Boolean compararVersao) {
+		this.compararVersao = compararVersao;
+	}
+
 	public ContagemDadoSituacaoEnum getAlteradoDadoContagem() {
 		return alteradoDadoContagem;
 	}
@@ -42,4 +57,12 @@ public class TransacaoTDDto extends AbstractBaseDto {
 	public void setAlteradoDadoContagem(ContagemDadoSituacaoEnum alteradoDadoContagem) {
 		this.alteradoDadoContagem = alteradoDadoContagem;
 	}
+
+	public ColunaDto getEntidadeOrigem() {
+		return entidadeOrigem;
+	}
+
+	public void setEntidadeOrigem(ColunaDto entidadeOrigem) {
+		this.entidadeOrigem = entidadeOrigem;
+	}	
 }

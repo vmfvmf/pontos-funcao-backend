@@ -8,13 +8,14 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.DiscriminatorOptions;
 
 @Entity
 @DiscriminatorValue("A")
 @DiscriminatorOptions(force = true)
-public class ContagemItemArquivoReferenciado extends AbstractContagemItem {
+public class ContagemItemArquivoReferenciado extends AbstractContagemItem<ContagemItemArquivoReferenciado> {
 
 	/**
 	 * 
@@ -24,6 +25,10 @@ public class ContagemItemArquivoReferenciado extends AbstractContagemItem {
 	@OneToMany(cascade = {CascadeType.ALL}, orphanRemoval = true)
 	@JoinColumn(name = "contagem_item_id")
 	private List<Tabela> tabelas = new ArrayList<>();
+	
+	@OneToOne
+	@JoinColumn(name="contagem_item_origem_id")
+	private ContagemItemArquivoReferenciado entidadeOrigem;
 
 	public ContagemItemArquivoReferenciado() {
 		super();
@@ -41,7 +46,7 @@ public class ContagemItemArquivoReferenciado extends AbstractContagemItem {
 	@Override
 	public ContagemItemArquivoReferenciado clone() {
 		ContagemItemArquivoReferenciado novo = new ContagemItemArquivoReferenciado();
-		ContagemItemArquivoReferenciado.clone(novo, this);
+		super.clone(novo, this);
 				
 		getTabelas().forEach(tabela -> {
 			Tabela novaTabela = tabela.clone();
@@ -51,7 +56,23 @@ public class ContagemItemArquivoReferenciado extends AbstractContagemItem {
 		return novo;
 	}
 
-	public List<Tabela> getObjetos() {
-		return getTabelas();
+	public ContagemItemArquivoReferenciado getEntidadeOrigem() {
+		return this.entidadeOrigem;
+	}
+	
+	public void setEntidadeOrigem(ContagemItemArquivoReferenciado entidadeOrigem) {
+		this.entidadeOrigem = entidadeOrigem;
+	}
+
+	@Override
+	public ContagemItemArquivoReferenciado findOrigemDaSelecionada(
+			List<ContagemItemArquivoReferenciado> compararOrigem) {
+		if (compararOrigem.contains(this)) {
+			return this;
+		}
+		if (this.getEntidadeOrigem() == null) {
+			return null;
+		}
+		return this.getEntidadeOrigem().findOrigemDaSelecionada(compararOrigem);
 	}
 }

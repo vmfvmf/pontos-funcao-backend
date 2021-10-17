@@ -42,6 +42,8 @@ public class TransacaoTD extends AbstractBase implements IHaveCriadoModificadoId
 	
 	@Column
 	private LocalDate criado;
+	
+	private transient Boolean compararVersao = false;
 
 	public Long getId() {
 		return id;
@@ -87,17 +89,22 @@ public class TransacaoTD extends AbstractBase implements IHaveCriadoModificadoId
 	public void setModificado(LocalDate date) {
 	}
 	
+	public Boolean getCompararVersao() {
+		return compararVersao;
+	}
+
+	public void setCompararVersao(Boolean compararVersao) {
+		this.compararVersao = compararVersao;
+	}
+
 	@Override
 	public TransacaoTD clone() {
 		TransacaoTD nova = new TransacaoTD();
 		nova.setCriado(LocalDate.now());
-		nova.setTransacaoTDOrigem(calculateTransacaoTDOrigem());
+		nova.setTransacaoTDOrigem(this);
 		
 		return nova;
 	}
 	
-	private TransacaoTD calculateTransacaoTDOrigem() {
-		return  this.getTransacaoTDOrigem() != null && this.equals(this.getTransacaoTDOrigem())
-				? this.getTransacaoTDOrigem() : this;
-	}
+
 }

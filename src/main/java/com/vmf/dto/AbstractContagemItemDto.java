@@ -2,13 +2,14 @@ package com.vmf.dto;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vmf.entities.AbstractContagemItem;
 import com.vmf.enums.ComplexidadeItemEnum;
 import com.vmf.enums.ContagemItemFuncaoEnum;
 import com.vmf.enums.ContagemDadoSituacaoEnum;
 import com.vmf.interfaces.IHaveCriadoModificadoId;
 
-public abstract class AbstractContagemItemDto extends AbstractBaseDto implements IHaveCriadoModificadoId {
+public abstract class AbstractContagemItemDto<T> extends AbstractBaseDto implements IHaveCriadoModificadoId {
 	
 	private String nome;
 	private Integer td;
@@ -19,12 +20,19 @@ public abstract class AbstractContagemItemDto extends AbstractBaseDto implements
 	private LocalDate criado;
 	private LocalDate modificado;
 	
+	@JsonIgnore
+	private Boolean compararVersao;
+	
 	private ContagemDadoSituacaoEnum alteradoDadoContagem;
+	private String alteradoNome;
 	private Integer alteradoTd;
 	private Integer alteradoTr;	
 	private ComplexidadeItemEnum alteradoComplexidade;
 	private Integer alteradoPf;
 	private ContagemItemFuncaoEnum alteradoFuncao;
+	
+	@JsonIgnore
+	private AbstractContagemItem<T> entidadeOrigem;
 
 	public String getNome() {
 		return nome;
@@ -89,8 +97,15 @@ public abstract class AbstractContagemItemDto extends AbstractBaseDto implements
 	public void setModificado(LocalDate modificado) {
 		this.modificado = modificado;
 	}
-
 	
+	public String getAlteradoNome() {
+		return alteradoNome;
+	}
+
+	public void setAlteradoNome(String alteradoNome) {
+		this.alteradoNome = alteradoNome;
+	}
+
 	public Integer getAlteradoTd() {
 		return alteradoTd;
 	}
@@ -109,6 +124,14 @@ public abstract class AbstractContagemItemDto extends AbstractBaseDto implements
 
 	public ComplexidadeItemEnum getAlteradoComplexidade() {
 		return alteradoComplexidade;
+	}
+
+	public Boolean getCompararVersao() {
+		return compararVersao;
+	}
+
+	public void setCompararVersao(Boolean compararVersao) {
+		this.compararVersao = compararVersao;
 	}
 
 	public void setAlteradoComplexidade(ComplexidadeItemEnum alteradoComplexidade) {
@@ -140,7 +163,19 @@ public abstract class AbstractContagemItemDto extends AbstractBaseDto implements
 	}	
 	
 
-	public void checkComparacao(AbstractContagemItem anterior) {
+	public AbstractContagemItem<T> getEntidadeOrigem() {
+		return entidadeOrigem;
+	}
+
+	public void setEntidadeOrigem(AbstractContagemItem<T> entidadeOrigem) {
+		this.entidadeOrigem = entidadeOrigem;
+	}
+
+	protected void checkSuperComparacao(AbstractContagemItem<T> anterior) {
+		if (!getNome().equals(anterior.getNome())) {
+			setAlteradoNome(anterior.getNome());
+			setAlteradoDadoContagem(ContagemDadoSituacaoEnum.ALTERADO);
+		}
 		if (!getTd().equals(anterior.getTd())) {
 			setAlteradoTd(anterior.getTd());
 			setAlteradoDadoContagem(ContagemDadoSituacaoEnum.ALTERADO);
@@ -154,11 +189,11 @@ public abstract class AbstractContagemItemDto extends AbstractBaseDto implements
 			setAlteradoDadoContagem(ContagemDadoSituacaoEnum.ALTERADO);			
 		}
 		if (!getPf().equals(anterior.getPf())) {
-			setPf(anterior.getPf());
+			setAlteradoPf(anterior.getPf());
 			setAlteradoDadoContagem(ContagemDadoSituacaoEnum.ALTERADO);			
 		}
 		if (!getFuncao().equals(anterior.getFuncao())) {
-			setFuncao(anterior.getFuncao());
+			setAlteradoFuncao(anterior.getFuncao());
 			setAlteradoDadoContagem(ContagemDadoSituacaoEnum.ALTERADO);			
 		}
 	}

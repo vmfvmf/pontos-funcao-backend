@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.vmf.dto.TransacaoTDDto;
 import com.vmf.entities.TransacaoTD;
+import com.vmf.enums.ContagemDadoSituacaoEnum;
 import com.vmf.service.TransacaoTDService;
 
 @Service("transacaoTDMapperConverter")
@@ -19,7 +20,7 @@ public class TransacaoTDMapperConverter extends AbstractMapperBase<TransacaoTDDt
 		return new AbstractConverter<TransacaoTD, TransacaoTDDto>(){			
 			@Override
 			protected TransacaoTDDto convert(TransacaoTD source) {
-				TransacaoTDDto dto = getModelMapper().map(source, TransacaoTDDto.class);
+				TransacaoTDDto dto = convertToDto(source);
 				return dto;
 			}			
 		};
@@ -29,7 +30,7 @@ public class TransacaoTDMapperConverter extends AbstractMapperBase<TransacaoTDDt
 		return new AbstractConverter<TransacaoTDDto, TransacaoTD>(){
 			@Override
 			protected TransacaoTD convert(TransacaoTDDto source) {
-				TransacaoTD entidade = getModelMapper().map(source, TransacaoTD.class);
+				TransacaoTD entidade = convertToEntity(source);
 				if (entidade.getId() != null) {
 					Optional<TransacaoTD> origem = transacaoTDService.findById(entidade.getId());
 					if (origem.isPresent()) {
@@ -49,6 +50,17 @@ public class TransacaoTDMapperConverter extends AbstractMapperBase<TransacaoTDDt
 
 	@Override
 	public TransacaoTDDto convertToDto(TransacaoTD entity) {
-		return convertToTarget(entity, TransacaoTDDto.class);
+		TransacaoTDDto dto = convertToTarget(entity, TransacaoTDDto.class);
+		if (dto.getCompararVersao()) {
+			if (dto.getEntidadeOrigem() == null) {
+				dto.setAlteradoDadoContagem(ContagemDadoSituacaoEnum.NOVO);
+			}
+		}
+		return dto;
+	}
+
+	@Override
+	public TransacaoTDService getService() {
+		return transacaoTDService;
 	}	
 }

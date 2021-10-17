@@ -106,8 +106,7 @@ public class ContagemService extends AbstractService<ContagemDto, Contagem> {
 		super.setAfterSaveCallback((entidade) -> {
 			super.setAfterSaveCallback(null);
 			Contagem nova = origem.criarEsbocoVersionado();
-			entidade = this.save(nova);
-			return entidade;
+			return this.save(nova);
 		});
 	}
 

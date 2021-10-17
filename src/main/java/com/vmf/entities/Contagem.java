@@ -90,6 +90,7 @@ public class Contagem extends AbstractBase implements IHaveEntidadeOrigem<Contag
 	private Boolean ultimaVersao;
 	
 	public transient Boolean clonada = false;
+	private transient Boolean compararVersao = false;
 	
 	public Long getId() {
 		return id;
@@ -219,6 +220,14 @@ public class Contagem extends AbstractBase implements IHaveEntidadeOrigem<Contag
 		this.ultimaVersao = ultimaVersao;
 	}
 	
+	public Boolean getCompararVersao() {
+		return compararVersao;
+	}
+
+	public void setCompararVersao(Boolean compararVersao) {
+		this.compararVersao = compararVersao;
+	}
+
 	public Boolean equals(Contagem other) {
 		Boolean equals = false;
 		
@@ -262,7 +271,7 @@ public class Contagem extends AbstractBase implements IHaveEntidadeOrigem<Contag
 	public Contagem criarEsbocoVersionado() {
 		Contagem contagem = new Contagem();
 		contagem.setContador(this.getContador());
-		contagem.setEntidadeOrigem(calculateContagemOrigem());
+		contagem.setEntidadeOrigem(this);
 		contagem.setDataContagem(LocalDate.now());
 		contagem.setEscopo(this.getEscopo());
 		contagem.setEstado(ContagemEstado.E);
@@ -290,14 +299,10 @@ public class Contagem extends AbstractBase implements IHaveEntidadeOrigem<Contag
 				.forEach(tab -> tab.getColunas().forEach(col -> colunas.add(col))));
 		
 		contagem.getTransacoes().forEach(trans -> trans.getTransacaoTDs().forEach(td -> td.setColuna(
-				colunas.stream().filter(col -> col.getColunaOrigem().equals(td.getTransacaoTDOrigem().getColuna()))
+				colunas.stream().filter(col -> col.getEntidadeOrigem().equals(td.getTransacaoTDOrigem().getColuna()))
 				.findFirst().get()
 		)));
 		
 		return contagem;
-	}
-	
-	private Contagem calculateContagemOrigem() {
-		return  this.contagemOrigem != null && this.equals(this.contagemOrigem) ? this.contagemOrigem : this;
 	}
 }

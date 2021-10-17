@@ -104,7 +104,6 @@ public abstract class AbstractService<D, E> {
 		entity.setModificado(null);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public Boolean verificaSeAnteriorEhAnterior(IHaveEntidadeOrigem<E> atualOrigem, E anterior) {
 		if (atualOrigem == null) {
 			return false;
@@ -115,7 +114,6 @@ public abstract class AbstractService<D, E> {
 		return verificaSeAnteriorEhAnterior(((IHaveEntidadeOrigem<E>)atualOrigem.getEntidadeOrigem()), anterior);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public Boolean verificaSeAnteriorEhAnterior(Long anteriorId, IHaveEntidadeOrigem<E> atualOrigem) {
 		if (atualOrigem == null) {
 			return false;

@@ -2,8 +2,6 @@ package com.vmf.interfaces;
 
 import com.vmf.enums.ContagemDadoSituacaoEnum;
 
-public interface ISetAlteradoDadoContagem {
-
+public interface IDtoContagemDadoAlterado extends IGetId {
 	void setAlteradoDadoContagem(ContagemDadoSituacaoEnum situacao);
-
 }

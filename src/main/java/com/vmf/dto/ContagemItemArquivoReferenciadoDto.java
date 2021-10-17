@@ -3,11 +3,10 @@ package com.vmf.dto;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.vmf.entities.AbstractContagemItem;
 import com.vmf.entities.ContagemItemArquivoReferenciado;
 import com.vmf.interfaces.IDtoComparaVersao;
 
-public class ContagemItemArquivoReferenciadoDto extends AbstractContagemItemDto 
+public class ContagemItemArquivoReferenciadoDto extends AbstractContagemItemDto<ContagemItemArquivoReferenciado>
 implements IDtoComparaVersao<ContagemItemArquivoReferenciado, TabelaDto> {
 
 	private List<TabelaDto> tabelas;
@@ -20,15 +19,14 @@ implements IDtoComparaVersao<ContagemItemArquivoReferenciado, TabelaDto> {
 		this.tabelas = tabelas;
 	}	
 
-	@Override
-	public void checkComparacao(ContagemItemArquivoReferenciado anterior) {
-		super.checkComparacao((AbstractContagemItem)anterior);
-	}
-
 	@JsonIgnore
 	@Override
 	public List<TabelaDto> getObjetos() {
 		return getTabelas();
+	}
+
+	public void checkComparacao(ContagemItemArquivoReferenciado entidadeAnterior) {
+		super.checkSuperComparacao(entidadeAnterior);
 	}
 
 }

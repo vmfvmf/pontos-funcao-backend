@@ -10,11 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.vmf.dto.ContagemItemTransacaoDto;
-import com.vmf.entities.AbstractContagemItem;
 import com.vmf.entities.Coluna;
 import com.vmf.entities.ContagemItemTransacao;
 import com.vmf.entities.TransacaoTD;
-import com.vmf.mappers.AbstractMapperBase;
 import com.vmf.mappers.ContagemItemTransacaoConverter;
 
 @Service("contagemItemTransacaoService")
@@ -41,7 +39,7 @@ public class ContagemItemTransacaoService extends AbstractService<ContagemItemTr
 				.getArquivosReferenciados().stream().forEach(arq -> {
 					 arq.getTabelas().forEach(tabela -> {
 						 Optional<Coluna> tdColuna =  tabela.getColunas().stream()
-						.filter(coluna -> Objects.equals(coluna.getColunaOrigem(),(td.getTransacaoTDOrigem().getColuna())))
+						.filter(coluna -> Objects.equals(coluna.getEntidadeOrigem(),(td.getTransacaoTDOrigem().getColuna())))
 						.findFirst();
 						 if (tdColuna.isPresent()) {
 							 td.setColuna(tdColuna.get());
@@ -69,8 +67,8 @@ public class ContagemItemTransacaoService extends AbstractService<ContagemItemTr
 	}
 
 	public void trataEsbocoIncrementoVersao(ContagemItemTransacao transacao) {
-		AbstractContagemItem transParent = findById(transacao.getId()).get();
-		transacao.setContagemItemOrigem(transParent);
+		ContagemItemTransacao transParent = findById(transacao.getId()).get();
+		transacao.setEntidadeOrigem(transParent);
 		setCriadoModificadoId(transacao);
 		
 		for (TransacaoTD td : transacao.getTransacaoTDs()) {
@@ -83,7 +81,7 @@ public class ContagemItemTransacaoService extends AbstractService<ContagemItemTr
 				.forEach(arquivo -> arquivo.getTabelas().forEach(tabela -> novasColunas.addAll(tabela.getColunas())));
 				
 				td.setColuna(novasColunas.stream()
-						.filter(col -> col.getColunaOrigem().getId().equals(td2.getTransacaoTDOrigem().getColuna().getId()))
+						.filter(col -> col.getEntidadeOrigem().getId().equals(td2.getTransacaoTDOrigem().getColuna().getId()))
 						.findFirst().get());
 			});
 			
@@ -92,7 +90,7 @@ public class ContagemItemTransacaoService extends AbstractService<ContagemItemTr
 	}
 
 	@Override
-	public AbstractMapperBase<ContagemItemTransacaoDto, ContagemItemTransacao> getMapper() {
+	public ContagemItemTransacaoConverter getMapper() {
 		return mapper;
 	}
 }

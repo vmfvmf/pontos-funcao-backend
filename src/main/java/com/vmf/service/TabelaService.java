@@ -51,7 +51,7 @@ public class TabelaService extends AbstractService<TabelaDto, Tabela>{
 
 	public void trataEsbocoIncrementoVersao(Tabela tabela) {
 		Tabela tabParent = findById(tabela.getId()).get();
-		tabela.setTabelaOrigem(tabParent);
+		tabela.setEntidadeOrigem(tabParent);
 		setCriadoModificadoId(tabela);
 		
 		for (Coluna coluna : tabela.getColunas()) {

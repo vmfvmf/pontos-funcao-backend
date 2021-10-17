@@ -6,16 +6,21 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration.AccessLevel;
 
+import com.vmf.service.AbstractService;
+
 public abstract class AbstractMapperBase<D, E> {
 	private ModelMapper modelMapper;
-	
+		
 	public AbstractMapperBase() {
 		modelMapper = new ModelMapper();
 		modelMapper.getConfiguration()
 	  .setFieldMatchingEnabled(true)
 	  .setFieldAccessLevel(AccessLevel.PRIVATE)
+	  .setAmbiguityIgnored(true)
 	  .setSkipNullEnabled(true);
 	}
+	
+	public abstract AbstractService<D, E> getService();
 	
 	public ModelMapper getModelMapper() {
 	    return modelMapper;
@@ -42,4 +47,5 @@ public abstract class AbstractMapperBase<D, E> {
 			      .map(this::convertToDto)
 			      .collect(Collectors.toList());
 	}
+		
 }

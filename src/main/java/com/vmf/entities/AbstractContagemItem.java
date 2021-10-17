@@ -1,6 +1,7 @@
 package com.vmf.entities;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -14,7 +15,6 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DiscriminatorOptions;
@@ -22,14 +22,13 @@ import org.hibernate.annotations.DiscriminatorOptions;
 import com.vmf.enums.ComplexidadeItemEnum;
 import com.vmf.enums.ContagemItemFuncaoEnum;
 import com.vmf.interfaces.IHaveCriadoModificadoId;
-import com.vmf.interfaces.IHaveEntidadeOrigem;
 
 @Entity
 @Table(name = "contagem_item")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "tipo")
 @DiscriminatorOptions(force = true)
-public abstract class AbstractContagemItem extends AbstractBase implements IHaveCriadoModificadoId, IHaveEntidadeOrigem<AbstractContagemItem> {
+public abstract class AbstractContagemItem<T> extends AbstractBase implements IHaveCriadoModificadoId {
 	/**
 	 * 
 	 */
@@ -63,15 +62,13 @@ public abstract class AbstractContagemItem extends AbstractBase implements IHave
 	@Enumerated(EnumType.STRING)
 	private ContagemItemFuncaoEnum funcao;
 	
-	@OneToOne
-	@JoinColumn(name="contagem_item_origem_id")
-	private AbstractContagemItem contagemItemOrigem;
-	
 	@Column
 	private LocalDate criado;
 	
 	@Column
 	private LocalDate modificado;
+	
+	private transient Boolean compararVersao = false;
 				
 	public Long getId() {
 		return id;
@@ -137,14 +134,6 @@ public abstract class AbstractContagemItem extends AbstractBase implements IHave
 		this.funcao = funcao;
 	}
 
-	public AbstractContagemItem getEntidadeOrigem() {
-		return contagemItemOrigem;
-	}
-
-	public void setContagemItemOrigem(AbstractContagemItem contagemItemOrigem) {
-		this.contagemItemOrigem = contagemItemOrigem;
-	}
-
 	public LocalDate getCriado() {
 		return criado;
 	}
@@ -161,7 +150,15 @@ public abstract class AbstractContagemItem extends AbstractBase implements IHave
 		this.modificado = modificado;
 	}	
 	
-	public static void clone(AbstractContagemItem nova, AbstractContagemItem origem) {
+	public Boolean getCompararVersao() {
+		return compararVersao;
+	}
+
+	public void setCompararVersao(Boolean compararVersao) {
+		this.compararVersao = compararVersao;
+	}
+
+	public void clone(AbstractContagemItem<T> nova, AbstractContagemItem<T> origem) {
 		nova.setComplexidade(origem.getComplexidade());
 		nova.setCriado(LocalDate.now());
 		nova.setFuncao(origem.getFuncao());
@@ -169,11 +166,7 @@ public abstract class AbstractContagemItem extends AbstractBase implements IHave
 		nova.setPf(origem.getPf());
 		nova.setTd(origem.getTd());
 		nova.setTr(origem.getTr());
-		nova.setContagemItemOrigem(calculateContagemOrigem(origem));
 	}
-	
-	protected static AbstractContagemItem calculateContagemOrigem(AbstractContagemItem origem) {
-		return  origem.getEntidadeOrigem() != null && origem.equals(origem.getEntidadeOrigem())
-				?  origem.getEntidadeOrigem() : origem;
-	}
+
+	public abstract T findOrigemDaSelecionada(List<T> compararOrigem);
 }
